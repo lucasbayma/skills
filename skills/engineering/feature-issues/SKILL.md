@@ -1,6 +1,6 @@
 ---
 name: feature-issues
-description: Convert a feature plan or technical spec into implementation issues, stories, tasks, and subtasks. Use when the user wants issues saved to GitHub Issues, Linear, Jira, or local markdown, with dependencies, acceptance criteria, AFK/HITL classification, and autonomous-execution-ready issue bodies.
+description: Convert a feature plan or technical spec into implementation issues, stories, tasks, and subtasks. Use when the user wants issues saved to GitHub Issues, Linear, Jira, or local markdown, with dependencies, acceptance criteria, AFK/HITL classification, and autonomous-execution-ready issue bodies. Always writes a local Markdown issue index under docs/features using the feature slug, even when also publishing to GitHub, Linear, Jira, or another tracker.
 ---
 
 # Feature Issues
@@ -74,11 +74,18 @@ Ask user to approve granularity and tracker.
 
 ### 5. Publish
 
-Use tracker config:
+Always write the local Markdown issue index first:
+
+- path: `docs/features/<feature-slug>/issues.md`
+- include every issue body using `references/issue-template.md`
+- include tracker URL/ID for each issue after publish
+- keep dependency links updated with real tracker IDs when available
+
+Then use tracker config:
 
 - **GitHub**: create issues with `gh issue create` or GitHub connector.
-- **Linear**: use Linear connector when available; otherwise write local drafts and tell user.
-- **Jira**: use configured Jira workflow if available; otherwise write local drafts and tell user.
-- **Local markdown**: write files under `docs/features/<feature-slug>/`.
+- **Linear**: use Linear connector when available; if unavailable, keep local Markdown as source of truth and tell user.
+- **Jira**: use configured Jira workflow if available; if unavailable, keep local Markdown as source of truth and tell user.
+- **Local markdown**: `docs/features/<feature-slug>/issues.md` is the source of truth.
 
 Do not close or mutate parent issue unless user asks.

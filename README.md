@@ -93,7 +93,7 @@ Expected output:
 
 - `docs/features/<feature-slug>/plan.md`
 - `technical-spec.md`
-- `issues.md` or tracker issues
+- `issues.md`
 - `uat.md`
 - `index.html`
 - `state.json`
@@ -259,7 +259,7 @@ Default contents:
 - [`tdd`](./skills/engineering/tdd/SKILL.md): implement one issue at a time with red-green-refactor.
 - [`feature-plan`](./skills/engineering/feature-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
 - [`feature-spec`](./skills/engineering/feature-spec/SKILL.md): create technical spec from plan/context.
-- [`feature-issues`](./skills/engineering/feature-issues/SKILL.md): publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
+- [`feature-issues`](./skills/engineering/feature-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
 - [`feature-uat`](./skills/engineering/feature-uat/SKILL.md): generate business-facing UAT scenarios.
 - [`autonomous-feature-executor`](./skills/engineering/autonomous-feature-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
 
