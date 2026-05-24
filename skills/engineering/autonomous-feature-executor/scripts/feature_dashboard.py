@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import html
 import json
+import os
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -60,9 +63,27 @@ def load_state(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
 
-def save_state(path: Path, state: dict[str, Any]) -> None:
+@contextmanager
+def state_lock(path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
+    lock_path = path.with_name(path.name + ".lock")
+    with lock_path.open("w") as lock_file:
+        fcntl.flock(lock_file, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file, fcntl.LOCK_UN)
+
+
+def atomic_write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    tmp_path.write_text(content)
+    tmp_path.replace(path)
+
+
+def save_state(path: Path, state: dict[str, Any]) -> None:
+    atomic_write(path, json.dumps(state, indent=2, sort_keys=True) + "\n")
 
 
 def issue_link(issue: dict[str, Any]) -> str:
@@ -512,66 +533,7 @@ def remove_active_agent(state: dict[str, Any], agent_id: str) -> None:
     ]
 
 
-def render_to_file(state: dict[str, Any], html_path: Path) -> None:
-    html_path.parent.mkdir(parents=True, exist_ok=True)
-    html_path.write_text(render_html(state))
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--state", required=True, type=Path)
-    parser.add_argument("--html", required=True, type=Path)
-    sub = parser.add_subparsers(dest="action", required=True)
-
-    init = sub.add_parser("init")
-    init.add_argument("--title", required=True)
-    init.add_argument("--summary", default="")
-    init.add_argument("--validation-command", default="")
-    init.add_argument(
-        "--issue",
-        action="append",
-        default=[],
-        help="id|title|url|status|type|blocked_by_csv|summary|execution_time",
-    )
-
-    issue_cmd = sub.add_parser("issue")
-    issue_cmd.add_argument("--id", required=True)
-    issue_cmd.add_argument("--status", choices=STATUSES)
-    issue_cmd.add_argument("--summary")
-    issue_cmd.add_argument("--execution-time")
-    issue_cmd.add_argument("--started-at")
-    issue_cmd.add_argument("--finished-at")
-
-    event = sub.add_parser("event")
-    event.add_argument("--issue-id", default="feature")
-    event.add_argument("--actor", default="main")
-    event.add_argument("--summary", required=True)
-
-    agent = sub.add_parser("agent")
-    agent.add_argument("--id", required=True)
-    agent.add_argument("--role")
-    agent.add_argument("--issue-id")
-    agent.add_argument("--session")
-    agent.add_argument("--status")
-    agent.add_argument("--summary")
-    agent.add_argument("--started-at")
-    agent.add_argument("--output")
-    agent.add_argument("--output-file", type=Path)
-    agent.add_argument("--append-output", action="store_true")
-
-    agent_remove = sub.add_parser("agent-remove")
-    agent_remove.add_argument("--id", required=True)
-
-    validation = sub.add_parser("validation")
-    validation.add_argument("--command", dest="validation_command")
-    validation.add_argument("--status", default="pending")
-    validation.add_argument("--summary", default="")
-
-    sub.add_parser("render")
-
-    args = parser.parse_args()
-    state = load_state(args.state)
-
+def apply_action(args: argparse.Namespace, state: dict[str, Any]) -> None:
     if args.action == "init":
         state["feature"] = {"title": args.title, "summary": args.summary}
         state["issues"] = [parse_issue(raw) for raw in args.issue]
@@ -632,8 +594,69 @@ def main() -> None:
             "summary": args.summary,
         }
 
-    save_state(args.state, state)
-    render_to_file(state, args.html)
+
+def render_to_file(state: dict[str, Any], html_path: Path) -> None:
+    atomic_write(html_path, render_html(state))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--state", required=True, type=Path)
+    parser.add_argument("--html", required=True, type=Path)
+    sub = parser.add_subparsers(dest="action", required=True)
+
+    init = sub.add_parser("init")
+    init.add_argument("--title", required=True)
+    init.add_argument("--summary", default="")
+    init.add_argument("--validation-command", default="")
+    init.add_argument(
+        "--issue",
+        action="append",
+        default=[],
+        help="id|title|url|status|type|blocked_by_csv|summary|execution_time",
+    )
+
+    issue_cmd = sub.add_parser("issue")
+    issue_cmd.add_argument("--id", required=True)
+    issue_cmd.add_argument("--status", choices=STATUSES)
+    issue_cmd.add_argument("--summary")
+    issue_cmd.add_argument("--execution-time")
+    issue_cmd.add_argument("--started-at")
+    issue_cmd.add_argument("--finished-at")
+
+    event = sub.add_parser("event")
+    event.add_argument("--issue-id", default="feature")
+    event.add_argument("--actor", default="main")
+    event.add_argument("--summary", required=True)
+
+    agent = sub.add_parser("agent")
+    agent.add_argument("--id", required=True)
+    agent.add_argument("--role")
+    agent.add_argument("--issue-id")
+    agent.add_argument("--session")
+    agent.add_argument("--status")
+    agent.add_argument("--summary")
+    agent.add_argument("--started-at")
+    agent.add_argument("--output")
+    agent.add_argument("--output-file", type=Path)
+    agent.add_argument("--append-output", action="store_true")
+
+    agent_remove = sub.add_parser("agent-remove")
+    agent_remove.add_argument("--id", required=True)
+
+    validation = sub.add_parser("validation")
+    validation.add_argument("--command", dest="validation_command")
+    validation.add_argument("--status", default="pending")
+    validation.add_argument("--summary", default="")
+
+    sub.add_parser("render")
+
+    args = parser.parse_args()
+    with state_lock(args.state):
+        state = load_state(args.state)
+        apply_action(args, state)
+        save_state(args.state, state)
+        render_to_file(state, args.html)
 
 
 if __name__ == "__main__":

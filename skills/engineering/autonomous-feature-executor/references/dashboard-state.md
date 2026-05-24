@@ -76,3 +76,5 @@ Rendered HTML refreshes itself every 10 seconds while the tab is visible. Collap
 Running subagent sessions can be shown in collapsible dashboard panels through `active_agents`. Each agent should have a stable `id`, plus optional `role`, `issue_id`, `session`, `status`, `started_at`, `summary`, and `output`.
 
 Use `feature_dashboard.py agent --id <id> ...` to create or update a running session. Pass `--output` or `--output-file` to refresh the visible output, and `--append-output` to append instead of replacing. Use `feature_dashboard.py agent-remove --id <id>` when the subagent finishes. Agents with terminal statuses such as `done`, `complete`, `completed`, `finished`, or `stopped` are hidden from the rendered HTML.
+
+Concurrent dashboard updates are serialized through a sibling lock file named `<state>.lock`. The script reads state, applies the update, writes JSON, and renders HTML while holding that lock. JSON and HTML writes use atomic replace, so browser refreshes should not see partially written files.
