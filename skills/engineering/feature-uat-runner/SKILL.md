@@ -67,13 +67,18 @@ If user says a UAT failed or describes a problem:
 
 1. Capture exact repro, expected behavior, actual behavior, and evidence.
 2. Search code/tests/docs for likely source.
-3. Start a fix loop using repo-local `$tdd`.
-4. Add or update behavior tests that reproduce the failed UAT.
-5. Implement the minimal fix.
-6. Run focused tests, relevant validation, and the failed UAT again.
+3. Build a failure package with complete context:
+   - UAT id/title and priority
+   - user repro steps and user notes
+   - expected vs actual behavior
+   - evidence: logs, screenshots, command output, URLs, data state
+   - related issue/spec/plan references
+   - suspected files/tests and validation commands
+4. Send the failure package to `$autonomous-feature-executor`.
+5. `$autonomous-feature-executor` restarts the fix loop with executor `$tdd` and validator review.
+6. Re-run the failed UAT after executor/validator pass.
 7. Return to the UAT checklist only after validation passes.
-
-For autonomous feature execution, send the UAT failure back through `$autonomous-feature-executor` instead of bypassing the executor/validator split.
+Never bypass `$autonomous-feature-executor` for failed UAT fixes.
 
 ## Stop Conditions
 
