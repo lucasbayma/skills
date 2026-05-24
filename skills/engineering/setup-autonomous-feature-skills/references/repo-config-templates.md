@@ -38,13 +38,14 @@ Files:
 - `plan.md`
 - `technical-spec.md`
 - `uat.md`
-- `issues.md` when using local markdown tracker
+- `issues.md` always, even when issues are also published to GitHub, Linear, Jira, or another tracker
 - `index.html` execution dashboard
 - `state.json` execution state
 - `design/` local UI/design artifacts
 
 Rule:
 - Keep all feature-specific docs and generated HTML in this folder.
+- Keep `issues.md` updated with tracker IDs/URLs after publishing.
 
 Use `CONTEXT.md` and ADRs for domain language and architectural decisions.
 ```
