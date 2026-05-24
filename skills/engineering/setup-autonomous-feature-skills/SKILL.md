@@ -42,7 +42,21 @@ Required decisions:
 
 ### 3. Write
 
-Edit existing `CLAUDE.md` first, else `AGENTS.md`; if neither exists, ask which one to create.
+Before editing `CLAUDE.md` or `AGENTS.md`, ask explicit permission.
+
+Selection rules:
+
+- If `CLAUDE.md` exists, propose editing `CLAUDE.md`.
+- Else if `AGENTS.md` exists, propose editing `AGENTS.md`.
+- If neither exists, ask which one to create.
+
+Show:
+
+- target file
+- exact block to add/update
+- docs files to create
+
+Stop until the user approves. Do not modify `CLAUDE.md`, `AGENTS.md`, or create a new agent instruction file before approval.
 
 Add or update one block:
 
