@@ -4,17 +4,51 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import html
 import json
+import os
+from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 STATUSES = ["backlog", "in-progress", "validation", "uat", "done"]
+AUTO_REFRESH_SECONDS = 10
 
 
 def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def parse_time(value: str) -> datetime | None:
+    if not value:
+        return None
+    normalized = value.replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def format_duration(seconds: float) -> str:
+    total = max(0, int(seconds))
+    days, remainder = divmod(total, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    parts = []
+    if days:
+        parts.append(f"{days}d")
+    if hours:
+        parts.append(f"{hours}h")
+    if minutes:
+        parts.append(f"{minutes}m")
+    if not parts and seconds:
+        parts.append(f"{seconds}s")
+    return " ".join(parts) or "0s"
 
 
 def load_state(path: Path) -> dict[str, Any]:
@@ -22,15 +56,34 @@ def load_state(path: Path) -> dict[str, Any]:
         return {
             "feature": {"title": "Untitled feature", "summary": ""},
             "issues": [],
+            "active_agents": [],
             "events": [],
             "final_validation": {"command": "", "status": "pending", "summary": ""},
         }
     return json.loads(path.read_text())
 
 
-def save_state(path: Path, state: dict[str, Any]) -> None:
+@contextmanager
+def state_lock(path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n")
+    lock_path = path.with_name(path.name + ".lock")
+    with lock_path.open("w") as lock_file:
+        fcntl.flock(lock_file, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock_file, fcntl.LOCK_UN)
+
+
+def atomic_write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    tmp_path.write_text(content)
+    tmp_path.replace(path)
+
+
+def save_state(path: Path, state: dict[str, Any]) -> None:
+    atomic_write(path, json.dumps(state, indent=2, sort_keys=True) + "\n")
 
 
 def issue_link(issue: dict[str, Any]) -> str:
@@ -41,28 +94,195 @@ def issue_link(issue: dict[str, Any]) -> str:
     return text
 
 
+def svg_issue_link(issue: dict[str, Any], content: str) -> str:
+    url = issue.get("url")
+    if url:
+        return f'<a href="{html.escape(url)}">{content}</a>'
+    return content
+
+
+def truncate(text: str, length: int) -> str:
+    if len(text) <= length:
+        return text
+    return text[: max(0, length - 3)].rstrip() + "..."
+
+
+def status_class(status: str) -> str:
+    safe = "".join(char if char.isalnum() else "-" for char in status.lower()).strip("-")
+    return safe or "backlog"
+
+
+def issue_execution_time(issue: dict[str, Any]) -> str:
+    for key in ("execution_time", "runtime", "duration", "elapsed"):
+        value = issue.get(key)
+        if value:
+            return str(value)
+
+    started = parse_time(issue.get("started_at", ""))
+    finished = parse_time(issue.get("finished_at", "") or issue.get("ended_at", ""))
+    if started and finished:
+        return format_duration((finished - started).total_seconds())
+    if started:
+        elapsed = datetime.now(timezone.utc) - started
+        return f"running {format_duration(elapsed.total_seconds())}"
+    return "not recorded"
+
+
+def active_agents(state: dict[str, Any]) -> list[dict[str, Any]]:
+    agents = []
+    for agent in state.get("active_agents", []):
+        status = agent.get("status", "running")
+        if status in {"done", "complete", "completed", "finished", "stopped"}:
+            continue
+        agents.append(agent)
+    return agents
+
+
 def render_tree(issues: list[dict[str, Any]]) -> str:
-    by_blocker: dict[str, list[dict[str, Any]]] = {}
-    blocked = set()
+    issue_by_id = {}
+    issue_ids = []
     for issue in issues:
+        issue_id = issue.get("id")
+        if issue_id and issue_id not in issue_by_id:
+            issue_by_id[issue_id] = issue
+            issue_ids.append(issue_id)
+    if not issue_ids:
+        return '<p class="empty">empty</p>'
+
+    children_by_dep: dict[str, list[str]] = {issue_id: [] for issue_id in issue_ids}
+    indegree: dict[str, int] = {issue_id: 0 for issue_id in issue_ids}
+    edges: list[tuple[str, str]] = []
+    unknown_deps: dict[str, list[str]] = {}
+
+    for issue in issues:
+        issue_id = issue.get("id")
+        if not issue_id:
+            continue
         for dep in issue.get("blocked_by", []):
-            by_blocker.setdefault(dep, []).append(issue)
-            blocked.add(issue.get("id"))
-    roots = [issue for issue in issues if issue.get("id") not in blocked]
+            if dep == issue_id:
+                continue
+            if dep not in issue_by_id:
+                unknown_deps.setdefault(issue_id, []).append(dep)
+                continue
+            edge = (dep, issue_id)
+            if edge in edges:
+                continue
+            edges.append(edge)
+            children_by_dep.setdefault(dep, []).append(issue_id)
+            indegree[issue_id] += 1
 
-    def node(issue: dict[str, Any]) -> str:
-        children = by_blocker.get(issue.get("id"), [])
-        child_html = "".join(node(child) for child in children)
-        deps = ", ".join(html.escape(dep) for dep in issue.get("blocked_by", [])) or "none"
-        body = (
-            f"<span>{issue_link(issue)} {html.escape(issue.get('title', ''))}</span>"
-            f"<small>{html.escape(issue.get('status', 'backlog'))} | deps: {deps}</small>"
+    order = {issue_id: index for index, issue_id in enumerate(issue_ids)}
+    queue = [issue_id for issue_id in issue_ids if indegree[issue_id] == 0]
+    depth = {issue_id: 0 for issue_id in queue}
+    seen: list[str] = []
+    remaining_indegree = dict(indegree)
+
+    while queue:
+        issue_id = queue.pop(0)
+        seen.append(issue_id)
+        for child_id in children_by_dep.get(issue_id, []):
+            depth[child_id] = max(depth.get(child_id, 0), depth.get(issue_id, 0) + 1)
+            remaining_indegree[child_id] -= 1
+            if remaining_indegree[child_id] == 0:
+                queue.append(child_id)
+
+    cycle_ids = [issue_id for issue_id in issue_ids if issue_id not in seen]
+    if cycle_ids:
+        cycle_depth = (max(depth.values()) + 1) if depth else 0
+        for issue_id in cycle_ids:
+            depth.setdefault(issue_id, cycle_depth)
+
+    layers: dict[int, list[str]] = {}
+    for issue_id in issue_ids:
+        layers.setdefault(depth.get(issue_id, 0), []).append(issue_id)
+    for layer in layers.values():
+        layer.sort(key=lambda issue_id: order[issue_id])
+
+    node_w = 210
+    node_h = 72
+    gap_x = 76
+    gap_y = 88
+    margin = 36
+    layer_indexes = sorted(layers)
+    max_layer_size = max(len(layer) for layer in layers.values())
+    graph_w = max(720, (margin * 2) + (max_layer_size * node_w) + ((max_layer_size - 1) * gap_x))
+    graph_h = (margin * 2) + (len(layer_indexes) * node_h) + ((len(layer_indexes) - 1) * gap_y)
+
+    positions: dict[str, tuple[int, int]] = {}
+    for visual_layer, layer_index in enumerate(layer_indexes):
+        layer = layers[layer_index]
+        layer_w = (len(layer) * node_w) + ((len(layer) - 1) * gap_x)
+        x = (graph_w - layer_w) // 2
+        y = margin + visual_layer * (node_h + gap_y)
+        for issue_id in layer:
+            positions[issue_id] = (x, y)
+            x += node_w + gap_x
+
+    edge_html = []
+    for dep_id, issue_id in edges:
+        if dep_id not in positions or issue_id not in positions:
+            continue
+        dep_x, dep_y = positions[dep_id]
+        issue_x, issue_y = positions[issue_id]
+        start_x = dep_x + node_w // 2
+        start_y = dep_y + node_h
+        end_x = issue_x + node_w // 2
+        end_y = issue_y
+        mid_y = start_y + ((end_y - start_y) // 2)
+        edge_html.append(
+            '<path class="graph-edge" '
+            f'd="M {start_x} {start_y} C {start_x} {mid_y}, {end_x} {mid_y}, {end_x} {end_y}" />'
         )
-        if child_html:
-            return f"<li>{body}<ul>{child_html}</ul></li>"
-        return f"<li>{body}</li>"
 
-    return "<ul class=\"tree\">" + "".join(node(root) for root in roots) + "</ul>"
+    node_html = []
+    for issue_id in issue_ids:
+        issue = issue_by_id[issue_id]
+        x, y = positions[issue_id]
+        status = issue.get("status", "backlog")
+        title = truncate(issue.get("title", ""), 30)
+        content = (
+            f'<g class="graph-node status-{status_class(status)}" transform="translate({x} {y})">'
+            f"<title>{html.escape(issue_id)} - {html.escape(issue.get('title', ''))}</title>"
+            f'<rect width="{node_w}" height="{node_h}" rx="8" />'
+            f'<text class="node-id" x="{node_w // 2}" y="25" text-anchor="middle">{html.escape(issue_id)}</text>'
+            f'<text class="node-title" x="{node_w // 2}" y="45" text-anchor="middle">{html.escape(title)}</text>'
+            f'<text class="node-status" x="{node_w // 2}" y="61" text-anchor="middle">{html.escape(status)}</text>'
+            "</g>"
+        )
+        node_html.append(svg_issue_link(issue, content))
+
+    notes = []
+    if unknown_deps:
+        missing = "; ".join(
+            f"{html.escape(issue_id)}: {', '.join(html.escape(dep) for dep in deps)}"
+            for issue_id, deps in unknown_deps.items()
+        )
+        notes.append(f'<p class="graph-note">Missing dependency nodes: {missing}</p>')
+    if cycle_ids:
+        notes.append(
+            '<p class="graph-note warning">'
+            f"Dependency cycle detected around: {', '.join(html.escape(issue_id) for issue_id in cycle_ids)}"
+            "</p>"
+        )
+
+    return (
+        '<div class="issue-graph">'
+        f'<svg viewBox="0 0 {graph_w} {graph_h}" role="img" aria-label="Issue dependency graph">'
+        "<defs>"
+        '<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+        '<path d="M 0 0 L 10 5 L 0 10 z" />'
+        "</marker>"
+        "</defs>"
+        '<g class="graph-edges">'
+        + "".join(edge_html)
+        + "</g>"
+        '<g class="graph-nodes">'
+        + "".join(node_html)
+        + "</g>"
+        "</svg>"
+        + "".join(notes)
+        + "</div>"
+    )
 
 
 def render_kanban(issues: list[dict[str, Any]]) -> str:
@@ -76,7 +296,10 @@ def render_kanban(issues: list[dict[str, Any]]) -> str:
                 "<article class=\"card\">"
                 f"<strong>{issue_link(issue)} {html.escape(issue.get('title', ''))}</strong>"
                 f"<p>{html.escape(issue.get('summary', ''))}</p>"
+                '<div class="card-meta">'
                 f"<small>{html.escape(issue.get('type', 'AFK'))}</small>"
+                f"<small>runtime: {html.escape(issue_execution_time(issue))}</small>"
+                "</div>"
                 "</article>"
             )
         card_html = "".join(cards) or '<p class="empty">empty</p>'
@@ -98,11 +321,57 @@ def render_events(events: list[dict[str, Any]]) -> str:
     return "<ol class=\"events\">" + "".join(rows) + "</ol>"
 
 
+def render_active_agents(agents: list[dict[str, Any]]) -> str:
+    if not agents:
+        return ""
+
+    panels = []
+    for agent in agents:
+        agent_id = html.escape(agent.get("id", "agent"))
+        role = html.escape(agent.get("role", "subagent"))
+        issue_id = html.escape(agent.get("issue_id", "feature"))
+        session = html.escape(agent.get("session", "session"))
+        status = html.escape(agent.get("status", "running"))
+        started_at = html.escape(agent.get("started_at", ""))
+        summary = html.escape(agent.get("summary", ""))
+        output = html.escape(agent.get("output", ""))
+        output_html = output or "No output yet."
+        meta = (
+            '<div class="agent-meta">'
+            f"<span>{role}</span>"
+            f"<span>{issue_id}</span>"
+            f"<span>{status}</span>"
+            f"<span>{session}</span>"
+            + (f"<span>{started_at}</span>" if started_at else "")
+            + "</div>"
+        )
+        panels.append(
+            '<details class="agent-session" open data-toggle-key="agent-'
+            + agent_id
+            + '">'
+            f"<summary><strong>{agent_id}</strong><span>{role} / {issue_id}</span></summary>"
+            + meta
+            + (f'<p class="agent-summary">{summary}</p>' if summary else "")
+            + f'<pre class="agent-output">{output_html}</pre>'
+            + "</details>"
+        )
+
+    return (
+        '<details class="toggle-section" open data-toggle-key="active-agents">'
+        "<summary><h2>Active Agents</h2></summary>"
+        '<section class="panel agent-list">'
+        + "".join(panels)
+        + "</section>"
+        "</details>"
+    )
+
+
 def render_html(state: dict[str, Any]) -> str:
     feature = state.get("feature", {})
     validation = state.get("final_validation", {})
     title = html.escape(feature.get("title", "Untitled feature"))
     summary = html.escape(feature.get("summary", ""))
+    auto_refresh_ms = AUTO_REFRESH_SECONDS * 1000
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -121,14 +390,47 @@ def render_html(state: dict[str, Any]) -> str:
     a {{ color:var(--accent); text-decoration:none; }}
     .summary {{ color:var(--muted); max-width:900px; }}
     .panel {{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:16px; }}
-    .tree, .tree ul {{ list-style:none; padding-left:18px; }}
-    .tree li {{ margin:10px 0; position:relative; }}
-    .tree small {{ display:block; color:var(--muted); margin-top:2px; }}
+    .issue-graph {{ width:100%; overflow:auto; padding:8px; }}
+    .issue-graph svg {{ display:block; min-width:680px; width:100%; height:auto; }}
+    .issue-graph marker path {{ fill:#344054; }}
+    .graph-edge {{ fill:none; stroke:#344054; stroke-width:2.3; stroke-linecap:round; marker-end:url(#arrow); opacity:.86; }}
+    .graph-edge:hover {{ stroke:var(--accent); opacity:1; }}
+    .graph-node rect {{ fill:#fff; stroke:#98a2b3; stroke-width:1.4; filter:drop-shadow(0 3px 5px rgba(24,32,42,.08)); }}
+    .graph-node .node-id {{ font-size:15px; font-weight:800; fill:var(--ink); }}
+    .graph-node .node-title {{ font-size:11px; fill:#344054; }}
+    .graph-node .node-status {{ font-size:10px; text-transform:uppercase; fill:var(--muted); }}
+    .graph-node.status-done rect {{ fill:#ecfdf3; stroke:#75c486; }}
+    .graph-node.status-in-progress rect {{ fill:#fff7e6; stroke:#f2b650; }}
+    .graph-node.status-validation rect {{ fill:#eff8ff; stroke:#65a9e8; }}
+    .graph-node.status-uat rect {{ fill:#fdf2fa; stroke:#df84bd; }}
+    .graph-note {{ margin:8px 0 0; color:var(--muted); font-size:12px; }}
+    .graph-note.warning {{ color:#b42318; }}
     .kanban {{ display:grid; grid-template-columns:repeat(5, minmax(160px, 1fr)); gap:12px; align-items:start; }}
     .column {{ min-height:180px; background:#eef2f7; border:1px solid var(--line); border-radius:8px; padding:12px; }}
     .card {{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px; margin-bottom:10px; }}
     .card p {{ margin:6px 0; color:var(--muted); }}
+    .card-meta {{ display:flex; flex-wrap:wrap; gap:6px 10px; margin-top:8px; }}
     .card small, .empty {{ color:var(--muted); }}
+    .toggle-section {{ margin-top:28px; }}
+    .toggle-section summary {{ display:flex; align-items:center; gap:8px; width:max-content; cursor:pointer; color:var(--ink); }}
+    .toggle-section summary::-webkit-details-marker {{ display:none; }}
+    .toggle-section summary::marker {{ content:""; }}
+    .toggle-section summary::before {{ content:""; width:0; height:0; border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:7px solid var(--muted); transform:rotate(0deg); transition:transform .12s ease; }}
+    .toggle-section[open] summary::before {{ transform:rotate(90deg); }}
+    .toggle-section summary h2 {{ margin:0; }}
+    .toggle-section .panel {{ margin-top:12px; }}
+    .agent-list {{ display:grid; gap:10px; }}
+    .agent-session {{ border:1px solid var(--line); border-radius:8px; background:#fbfcfe; }}
+    .agent-session summary {{ display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; }}
+    .agent-session summary::-webkit-details-marker {{ display:none; }}
+    .agent-session summary::marker {{ content:""; }}
+    .agent-session summary::before {{ content:""; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid var(--muted); transform:rotate(0deg); transition:transform .12s ease; }}
+    .agent-session[open] summary::before {{ transform:rotate(90deg); }}
+    .agent-session summary span {{ color:var(--muted); font-size:12px; }}
+    .agent-meta {{ display:flex; flex-wrap:wrap; gap:8px; padding:0 12px 8px; }}
+    .agent-meta span {{ color:var(--muted); background:#eef2f7; border-radius:999px; padding:2px 8px; font-size:12px; }}
+    .agent-summary {{ margin:0; padding:0 12px 8px; color:var(--muted); }}
+    .agent-output {{ max-height:360px; overflow:auto; margin:0; padding:12px; border-top:1px solid var(--line); background:#101828; color:#f2f4f7; border-radius:0 0 8px 8px; font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:pre-wrap; }}
     .validation {{ display:grid; gap:4px; }}
     .events {{ list-style:none; padding:0; margin:0; }}
     .events li {{ display:grid; grid-template-columns:180px 90px 110px 1fr; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }}
@@ -143,19 +445,41 @@ def render_html(state: dict[str, Any]) -> str:
     <p class="summary">{summary}</p>
   </header>
   <main>
-    <h2>Issue Tree</h2>
-    <section class="panel">{render_tree(state.get("issues", []))}</section>
     <h2>Kanban</h2>
     {render_kanban(state.get("issues", []))}
+    {render_active_agents(active_agents(state))}
+    <details class="toggle-section" open data-toggle-key="issue-tree">
+      <summary><h2>Issue Tree</h2></summary>
+      <section class="panel">{render_tree(state.get("issues", []))}</section>
+    </details>
     <h2>Final Validation</h2>
     <section class="panel validation">
       <strong>{html.escape(validation.get("status", "pending"))}</strong>
       <code>{html.escape(validation.get("command", ""))}</code>
       <span>{html.escape(validation.get("summary", ""))}</span>
     </section>
-    <h2>Execution History</h2>
-    <section class="panel">{render_events(state.get("events", []))}</section>
+    <details class="toggle-section" open data-toggle-key="execution-history">
+      <summary><h2>Execution History</h2></summary>
+      <section class="panel">{render_events(state.get("events", []))}</section>
+    </details>
   </main>
+  <script>
+    const refreshDelay = {auto_refresh_ms};
+    document.querySelectorAll(".toggle-section, .agent-session").forEach((section, index) => {{
+      const key = `dashboard-toggle-${{section.dataset.toggleKey || index}}`;
+      const saved = localStorage.getItem(key);
+      if (saved === "open") section.open = true;
+      if (saved === "closed") section.open = false;
+      section.addEventListener("toggle", () => {{
+        localStorage.setItem(key, section.open ? "open" : "closed");
+      }});
+    }});
+    window.setInterval(() => {{
+      if (document.visibilityState === "visible") {{
+        window.location.reload();
+      }}
+    }}, refreshDelay);
+  </script>
 </body>
 </html>
 """
@@ -163,10 +487,10 @@ def render_html(state: dict[str, Any]) -> str:
 
 def parse_issue(raw: str) -> dict[str, Any]:
     parts = raw.split("|")
-    while len(parts) < 7:
+    while len(parts) < 8:
         parts.append("")
-    issue_id, title, url, status, issue_type, blocked_by, summary = parts[:7]
-    return {
+    issue_id, title, url, status, issue_type, blocked_by, summary, execution_time = parts[:8]
+    issue = {
         "id": issue_id,
         "title": title,
         "url": url,
@@ -175,48 +499,45 @@ def parse_issue(raw: str) -> dict[str, Any]:
         "blocked_by": [item.strip() for item in blocked_by.split(",") if item.strip()],
         "summary": summary,
     }
+    if execution_time:
+        issue["execution_time"] = execution_time
+    return issue
 
 
-def render_to_file(state: dict[str, Any], html_path: Path) -> None:
-    html_path.parent.mkdir(parents=True, exist_ok=True)
-    html_path.write_text(render_html(state))
+def upsert_active_agent(
+    state: dict[str, Any],
+    agent_id: str,
+    updates: dict[str, str],
+    append_output: bool = False,
+) -> None:
+    agents = state.setdefault("active_agents", [])
+    agent = next((item for item in agents if item.get("id") == agent_id), None)
+    if agent is None:
+        agent = {"id": agent_id, "status": "running", "started_at": now()}
+        agents.append(agent)
+
+    output = updates.pop("output", None)
+    for key, value in updates.items():
+        if value is not None:
+            agent[key] = value
+    if output is not None:
+        if append_output and agent.get("output"):
+            agent["output"] = agent["output"].rstrip() + "\n" + output
+        else:
+            agent["output"] = output
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--state", required=True, type=Path)
-    parser.add_argument("--html", required=True, type=Path)
-    sub = parser.add_subparsers(dest="action", required=True)
+def remove_active_agent(state: dict[str, Any], agent_id: str) -> None:
+    state["active_agents"] = [
+        agent for agent in state.get("active_agents", []) if agent.get("id") != agent_id
+    ]
 
-    init = sub.add_parser("init")
-    init.add_argument("--title", required=True)
-    init.add_argument("--summary", default="")
-    init.add_argument("--validation-command", default="")
-    init.add_argument("--issue", action="append", default=[], help="id|title|url|status|type|blocked_by_csv|summary")
 
-    issue_cmd = sub.add_parser("issue")
-    issue_cmd.add_argument("--id", required=True)
-    issue_cmd.add_argument("--status", choices=STATUSES)
-    issue_cmd.add_argument("--summary")
-
-    event = sub.add_parser("event")
-    event.add_argument("--issue-id", default="feature")
-    event.add_argument("--actor", default="main")
-    event.add_argument("--summary", required=True)
-
-    validation = sub.add_parser("validation")
-    validation.add_argument("--command", dest="validation_command")
-    validation.add_argument("--status", default="pending")
-    validation.add_argument("--summary", default="")
-
-    sub.add_parser("render")
-
-    args = parser.parse_args()
-    state = load_state(args.state)
-
+def apply_action(args: argparse.Namespace, state: dict[str, Any]) -> None:
     if args.action == "init":
         state["feature"] = {"title": args.title, "summary": args.summary}
         state["issues"] = [parse_issue(raw) for raw in args.issue]
+        state["active_agents"] = state.get("active_agents", [])
         state["events"] = state.get("events", [])
         state["final_validation"] = {
             "command": args.validation_command,
@@ -230,6 +551,12 @@ def main() -> None:
                     issue["status"] = args.status
                 if args.summary is not None:
                     issue["summary"] = args.summary
+                if args.execution_time is not None:
+                    issue["execution_time"] = args.execution_time
+                if args.started_at is not None:
+                    issue["started_at"] = args.started_at
+                if args.finished_at is not None:
+                    issue["finished_at"] = args.finished_at
                 break
     elif args.action == "event":
         state.setdefault("events", []).append(
@@ -240,6 +567,26 @@ def main() -> None:
                 "summary": args.summary,
             }
         )
+    elif args.action == "agent":
+        output = args.output
+        if args.output_file:
+            output = args.output_file.read_text()
+        upsert_active_agent(
+            state,
+            args.id,
+            {
+                "role": args.role,
+                "issue_id": args.issue_id,
+                "session": args.session,
+                "status": args.status,
+                "summary": args.summary,
+                "started_at": args.started_at,
+                "output": output,
+            },
+            append_output=args.append_output,
+        )
+    elif args.action == "agent-remove":
+        remove_active_agent(state, args.id)
     elif args.action == "validation":
         state["final_validation"] = {
             "command": args.validation_command or state.get("final_validation", {}).get("command", ""),
@@ -247,8 +594,69 @@ def main() -> None:
             "summary": args.summary,
         }
 
-    save_state(args.state, state)
-    render_to_file(state, args.html)
+
+def render_to_file(state: dict[str, Any], html_path: Path) -> None:
+    atomic_write(html_path, render_html(state))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--state", required=True, type=Path)
+    parser.add_argument("--html", required=True, type=Path)
+    sub = parser.add_subparsers(dest="action", required=True)
+
+    init = sub.add_parser("init")
+    init.add_argument("--title", required=True)
+    init.add_argument("--summary", default="")
+    init.add_argument("--validation-command", default="")
+    init.add_argument(
+        "--issue",
+        action="append",
+        default=[],
+        help="id|title|url|status|type|blocked_by_csv|summary|execution_time",
+    )
+
+    issue_cmd = sub.add_parser("issue")
+    issue_cmd.add_argument("--id", required=True)
+    issue_cmd.add_argument("--status", choices=STATUSES)
+    issue_cmd.add_argument("--summary")
+    issue_cmd.add_argument("--execution-time")
+    issue_cmd.add_argument("--started-at")
+    issue_cmd.add_argument("--finished-at")
+
+    event = sub.add_parser("event")
+    event.add_argument("--issue-id", default="feature")
+    event.add_argument("--actor", default="main")
+    event.add_argument("--summary", required=True)
+
+    agent = sub.add_parser("agent")
+    agent.add_argument("--id", required=True)
+    agent.add_argument("--role")
+    agent.add_argument("--issue-id")
+    agent.add_argument("--session")
+    agent.add_argument("--status")
+    agent.add_argument("--summary")
+    agent.add_argument("--started-at")
+    agent.add_argument("--output")
+    agent.add_argument("--output-file", type=Path)
+    agent.add_argument("--append-output", action="store_true")
+
+    agent_remove = sub.add_parser("agent-remove")
+    agent_remove.add_argument("--id", required=True)
+
+    validation = sub.add_parser("validation")
+    validation.add_argument("--command", dest="validation_command")
+    validation.add_argument("--status", default="pending")
+    validation.add_argument("--summary", default="")
+
+    sub.add_parser("render")
+
+    args = parser.parse_args()
+    with state_lock(args.state):
+        state = load_state(args.state)
+        apply_action(args, state)
+        save_state(args.state, state)
+        render_to_file(state, args.html)
 
 
 if __name__ == "__main__":
