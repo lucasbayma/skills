@@ -78,7 +78,7 @@ For each unblocked issue:
 7. If validator requires fixes, move issue to `in-progress` and send validator report to executor.
 8. Repeat until pass or blocked.
 
-If UAT is manual, stop and ask user to perform/approve UAT before `done`.
+If UAT is manual, hand off to `$feature-uat-runner` before `done`.
 
 ## Final Validation
 

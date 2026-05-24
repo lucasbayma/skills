@@ -16,6 +16,8 @@ Inspired by `mattpocock/skills`: small composable skills, repo-local config in `
 6. Create tracker issues with `$feature-issues`.
 7. Generate UATs with `$feature-uat`.
 8. Execute approved issues with `$autonomous-feature-executor`.
+9. Run guided UAT with `$feature-uat-runner`.
+10. Wrap up and create PR with `$feature-wrap-up`.
 
 ## Usage
 
@@ -40,7 +42,9 @@ Recommended install set:
 - `feature-spec`
 - `feature-issues`
 - `feature-uat`
+- `feature-uat-runner`
 - `autonomous-feature-executor`
+- `feature-wrap-up`
 
 After installation, run `$setup-autonomous-feature-skills` once in each target repo.
 
@@ -58,6 +62,8 @@ skills/
 ├── engineering/feature-plan/
 ├── engineering/feature-spec/
 ├── engineering/feature-uat/
+├── engineering/feature-uat-runner/
+├── engineering/feature-wrap-up/
 ├── engineering/grill-with-docs/
 ├── engineering/setup-autonomous-feature-skills/
 ├── engineering/tdd/
@@ -182,7 +188,7 @@ Use $grill-with-docs to clarify this feature:
 <feature request>
 
 If interface scope exists, ask whether to create/edit layouts and where.
-Then use $feature-plan, $feature-spec, $feature-issues, $feature-uat, and $autonomous-feature-executor.
+Then use $feature-plan, $feature-spec, $feature-issues, $feature-uat, $autonomous-feature-executor, $feature-uat-runner, and $feature-wrap-up.
 All communication and reports must use $caveman.
 ```
 
@@ -213,6 +219,18 @@ UAT only:
 Use $feature-uat to generate UATs from plan/spec/issues in docs/features/<feature-slug>/.
 ```
 
+Run UAT:
+
+```text
+Use $feature-uat-runner to guide me through UATs from docs/features/<feature-slug>/uat.md.
+```
+
+Wrap up:
+
+```text
+Use $feature-wrap-up to clean temporary dashboard files and create a PR for docs/features/<feature-slug>/.
+```
+
 UI only:
 
 ```text
@@ -231,10 +249,12 @@ This includes:
 - technical spec summaries
 - issue breakdown reports
 - UAT reports
+- UAT run confirmations
 - executor reports
 - validator reports
 - dashboard history
 - final completion reports
+- PR descriptions
 
 ## Feature Folder
 
@@ -252,6 +272,8 @@ Default contents:
 - `state.json` execution state
 - `design/` local UI/design artifacts
 
+`index.html` and `state.json` are runtime dashboard files. `$feature-wrap-up` removes them before PR when they are not needed.
+
 ## Skills
 
 - [`setup-autonomous-feature-skills`](./skills/engineering/setup-autonomous-feature-skills/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
@@ -264,6 +286,8 @@ Default contents:
 - [`feature-issues`](./skills/engineering/feature-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
 - [`feature-uat`](./skills/engineering/feature-uat/SKILL.md): generate business-facing UAT scenarios.
 - [`autonomous-feature-executor`](./skills/engineering/autonomous-feature-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
+- [`feature-uat-runner`](./skills/engineering/feature-uat-runner/SKILL.md): guide user through UAT scenarios, mark confirmations, and restart TDD fix loops on failure.
+- [`feature-wrap-up`](./skills/engineering/feature-wrap-up/SKILL.md): clean temporary dashboard files, summarize validation/UAT, and create a PR.
 
 ## Credits
 

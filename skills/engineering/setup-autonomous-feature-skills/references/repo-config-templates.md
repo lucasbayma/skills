@@ -40,8 +40,8 @@ Files:
 - `technical-spec.md`
 - `uat.md`
 - `issues.md` always, even when issues are also published to GitHub, Linear, Jira, or another tracker
-- `index.html` execution dashboard
-- `state.json` execution state
+- `index.html` execution dashboard, removed by `$feature-wrap-up` before PR when not needed
+- `state.json` execution state, removed by `$feature-wrap-up` before PR when not needed
 - `design/` local UI/design artifacts
 
 Rule:
@@ -109,6 +109,8 @@ Roles:
 - Main agent: orchestrates, updates dashboard, runs final validation.
 - Executor subagent: implements issue with repo-local `$tdd`, may edit files.
 - Validator subagent: validates diff against issue/spec/UAT, must not edit files.
+- UAT runner: guides user through manual UATs, marks checked scenarios, and restarts TDD fix loops on failure.
+- Feature wrap-up: removes runtime dashboard files and creates PR with UAT/validation status.
 - Caveman skill: compresses all user-facing communication and reports.
 - Grill-with-docs skill: clarifies feature decisions and updates domain docs before execution.
 - Huashu-design skill: creates or reviews UI screens/prototypes when interface scope exists.
