@@ -105,11 +105,12 @@ Dashboard:
 
 Roles:
 - Main agent: orchestrates, updates dashboard, runs final validation.
-- Executor subagent: implements issue with TDD, may edit files.
+- Executor subagent: implements issue with repo-local `$tdd`, may edit files.
 - Validator subagent: validates diff against issue/spec/UAT, must not edit files.
 - Caveman skill: compresses all user-facing communication and reports.
 - Grill-with-docs skill: clarifies feature decisions and updates domain docs before execution.
 - Huashu-design skill: creates or reviews UI screens/prototypes when interface scope exists.
+- TDD skill: red-green-refactor execution for one issue at a time.
 
 Communication:
 - All user-facing messages and reports must use `$caveman`.

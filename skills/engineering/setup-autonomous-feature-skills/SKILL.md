@@ -36,6 +36,7 @@ Required decisions:
 - **Design artifact path/surface**: default ask per feature; local artifacts go under `docs/features/<feature-slug>/design/`; external options Figma, existing codebase, screenshots, other.
 - **Status model**: use `backlog`, `in-progress`, `validation`, `uat`, `done`.
 - **Subagent policy**: executor may edit; validator may not edit.
+- **Implementation style**: executor subagents use repo-local `$tdd`.
 - **Communication style**: use repo-local `$caveman` for all user-facing communication and written reports.
 - **Clarification style**: use repo-local `$grill-with-docs` before planning/spec work when feature terms or business rules are ambiguous.
 
