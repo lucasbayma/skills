@@ -10,7 +10,7 @@ Main agent orchestrates. Executor subagent edits. Validator subagent reviews onl
 ## Hard Rules
 
 - Main agent does not implement feature code.
-- Executor subagent uses TDD and may edit files.
+- Executor subagent uses repo-local `$tdd` and may edit files.
 - Validator subagent receives code diff plus issue/spec/UAT context, not executor chat history.
 - Validator subagent must not fix code.
 - If validator reports required fixes, main agent sends report back to executor.

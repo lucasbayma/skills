@@ -1,6 +1,6 @@
 # Executor Subagent Prompt
 
-Use `$tdd` and implement one issue only. Use repo-local `$caveman` for every user-facing message and final report.
+Use repo-local `$tdd` and implement one issue only. Use repo-local `$caveman` for every user-facing message and final report.
 
 Inputs:
 

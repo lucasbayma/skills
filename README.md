@@ -35,6 +35,7 @@ Recommended install set:
 - `caveman`
 - `grill-with-docs`
 - `huashu-design`
+- `tdd`
 - `feature-plan`
 - `feature-spec`
 - `feature-issues`
@@ -59,6 +60,7 @@ skills/
 ├── engineering/feature-uat/
 ├── engineering/grill-with-docs/
 ├── engineering/setup-autonomous-feature-skills/
+├── engineering/tdd/
 └── productivity/caveman/
 ```
 
@@ -254,6 +256,7 @@ Default contents:
 - [`caveman`](./skills/productivity/caveman/SKILL.md): mandatory terse user-facing communication and reports.
 - [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): stress-test feature plans against domain docs and update glossary/ADRs.
 - [`huashu-design`](./skills/design/huashu-design/SKILL.md): create/review UI screens, layouts, and prototypes when feature scope includes an interface.
+- [`tdd`](./skills/engineering/tdd/SKILL.md): implement one issue at a time with red-green-refactor.
 - [`feature-plan`](./skills/engineering/feature-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
 - [`feature-spec`](./skills/engineering/feature-spec/SKILL.md): create technical spec from plan/context.
 - [`feature-issues`](./skills/engineering/feature-issues/SKILL.md): publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
@@ -266,6 +269,7 @@ Forked/adapted skills:
 
 - [`caveman`](./skills/productivity/caveman/SKILL.md): forked from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, originally inspired by Matt Pocock's concise communication workflow.
 - [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
+- [`tdd`](./skills/engineering/tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
 - [`huashu-design`](./skills/design/huashu-design/SKILL.md): forked/adapted from local [`huashu-design`](https://github.com/alchaincyf/huashu-design)-style skill at `/Users/bayma/.agents/skills/huashu-design/SKILL.md`.
 
 Architecture reference:
