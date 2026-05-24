@@ -32,7 +32,7 @@ Read:
 
 If final validation command is missing, discover from CI first. If still unknown, ask:
 
-`Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?`
+`Is there any command you want me to run at the end of feature development?`
 
 ## Issue Discovery
 
