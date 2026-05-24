@@ -9,6 +9,8 @@ Break spec into independently executable vertical slices and publish them to cho
 
 All user-facing communication and written issue reports must use `$caveman`.
 
+Hard rule: do not write `issues.md`, create tracker issues, or mutate any tracker until the user explicitly approves the proposed issue breakdown.
+
 ## Inputs
 
 Read:
@@ -63,7 +65,7 @@ Every autonomous-ready issue needs:
 
 ### 4. Confirm
 
-Show proposed breakdown before publishing:
+Show proposed breakdown before writing any file or publishing anything:
 
 - title
 - type AFK/HITL
@@ -71,7 +73,16 @@ Show proposed breakdown before publishing:
 - acceptance summary
 - target tracker
 
-Ask user to approve granularity and tracker.
+Ask user to approve:
+
+- issue list
+- granularity
+- dependencies
+- AFK/HITL classification
+- target tracker
+- local Markdown output path
+
+Stop here until the user explicitly approves. Do not create or edit `docs/features/<feature-slug>/issues.md` before approval.
 
 ### 5. Publish
 
