@@ -1,6 +1,6 @@
 ---
 name: setup-autonomous-feature-skills
-description: Configure a repo for autonomous feature delivery skills. Use before feature-plan, feature-spec, feature-issues, feature-uat, or autonomous-feature-executor when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions.
+description: Configure a repo for autonomous feature delivery skills. Use before feature-plan, feature-spec, feature-issues, feature-uat, feature-uat-runner, autonomous-feature-executor, or feature-wrap-up when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions.
 ---
 
 # Setup Autonomous Feature Skills
@@ -33,10 +33,13 @@ Required decisions:
 - **Final validation command**: discovered from CI when possible; otherwise ask: `Is there any command you want me to run at the end of feature development?`
 - **Dashboard path**: `docs/features/<feature-slug>/index.html`.
 - **Dashboard state path**: `docs/features/<feature-slug>/state.json`.
+- **Dashboard cleanup**: `$feature-wrap-up` removes runtime dashboard files before PR when they are not needed.
 - **Design artifact path/surface**: default ask per feature; local artifacts go under `docs/features/<feature-slug>/design/`; external options Figma, existing codebase, screenshots, other.
 - **Status model**: use `backlog`, `in-progress`, `validation`, `uat`, `done`.
 - **Subagent policy**: executor may edit; validator may not edit.
 - **Implementation style**: executor subagents use repo-local `$tdd`.
+- **UAT run style**: `$feature-uat-runner` guides one UAT at a time and restarts TDD fix loops on failure.
+- **Wrap-up style**: `$feature-wrap-up` creates PRs with caveman descriptions and UAT status.
 - **Communication style**: use repo-local `$caveman` for all user-facing communication and written reports.
 - **Clarification style**: use repo-local `$grill-with-docs` before planning/spec work when feature terms or business rules are ambiguous.
 

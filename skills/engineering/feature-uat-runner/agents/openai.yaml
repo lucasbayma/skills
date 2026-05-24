@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature UAT Runner"
+  short_description: "Guide and check off UAT scenarios"
+  default_prompt: "Use $feature-uat-runner to run UATs from this feature folder."
