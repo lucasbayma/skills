@@ -23,7 +23,8 @@ Save state and HTML inside same feature folder as docs:
       "status": "backlog",
       "type": "AFK",
       "blocked_by": [],
-      "summary": "Caveman report"
+      "summary": "Caveman report",
+      "execution_time": "12m"
     }
   ],
   "events": [
@@ -49,3 +50,11 @@ Save state and HTML inside same feature folder as docs:
 - validation
 - uat
 - done
+
+## Issue Runtime
+
+Kanban cards show issue execution time. Prefer `execution_time` for a precomputed value such as `12m` or `1h 8m`. If omitted, the dashboard also accepts `duration`, `elapsed`, or `runtime`. When `started_at` and `finished_at` are present, it calculates the duration automatically.
+
+## Auto Refresh
+
+Rendered HTML refreshes itself every 10 seconds while the tab is visible. Collapsed/open state for toggle sections is kept in browser `localStorage`.
