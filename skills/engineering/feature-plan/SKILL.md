@@ -14,7 +14,8 @@ All user-facing communication and written planning reports must use `$caveman`.
 Use what already exists first:
 
 - user request and conversation context
-- `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs
+- `docs/features/<feature-slug>/context.md`
+- root `CONTEXT.md`, `CONTEXT-MAP.md`, ADRs as reference inputs
 - existing feature docs under configured docs path
 - related issues/stories/tasks
 - relevant code paths and tests
@@ -39,7 +40,7 @@ Capture:
 - assumptions
 - unknowns
 
-Use project domain language from `CONTEXT.md` when present.
+Use feature-scoped domain language from `docs/features/<feature-slug>/context.md` when present; fall back to root `CONTEXT.md`.
 
 ### 2. Classify Size
 

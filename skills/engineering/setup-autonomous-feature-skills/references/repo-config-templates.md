@@ -35,6 +35,7 @@ Default feature docs path:
 `docs/features/<feature-slug>/`
 
 Files:
+- `context.md` output from `$grill-with-docs`
 - `plan.md`
 - `technical-spec.md`
 - `uat.md`
@@ -47,7 +48,7 @@ Rule:
 - Keep all feature-specific docs and generated HTML in this folder.
 - Keep `issues.md` updated with tracker IDs/URLs after publishing.
 
-Use `CONTEXT.md` and ADRs for domain language and architectural decisions.
+Use `docs/features/<feature-slug>/context.md` as the feature-scoped glossary/context created by `$grill-with-docs`. Root `CONTEXT.md` and ADRs are reference inputs unless the user explicitly asks to update global docs.
 ```
 
 ## docs/agents/feature-validation.md

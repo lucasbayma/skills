@@ -18,7 +18,8 @@ Read:
 - `docs/agents/feature-issue-tracker.md`
 - `docs/agents/feature-docs.md`
 - relevant parent issue/epic/story
-- `CONTEXT.md` and ADRs
+- `docs/features/<feature-slug>/context.md`
+- root `CONTEXT.md` and ADRs as reference inputs
 
 If tracker is ambiguous, ask user to choose GitHub, Linear, Jira, local markdown, or other.
 

@@ -20,7 +20,8 @@ Use `huashu-design` before finalizing the spec when the business definition incl
 Read:
 
 - repo setup docs under `docs/agents/`
-- `CONTEXT.md` and ADRs
+- `docs/features/<feature-slug>/context.md`
+- root `CONTEXT.md` and ADRs as reference inputs
 - relevant source modules and tests
 - existing specs for same area
 

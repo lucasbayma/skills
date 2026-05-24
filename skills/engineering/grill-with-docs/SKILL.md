@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: Stress-test a feature plan against the repo's domain language, docs, ADRs, business rules, UAT needs, tracker shape, validation command, and autonomous execution readiness. Use when planning a feature, clarifying ambiguous requirements, preparing feature-plan or feature-spec, or when user wants relentless questions with documentation updates.
+description: Stress-test a feature plan against the repo's domain language, docs, ADRs, business rules, UAT needs, tracker shape, validation command, and autonomous execution readiness. Use when planning a feature, clarifying ambiguous requirements, preparing feature-plan or feature-spec, or when user wants relentless questions with feature-scoped documentation updates in docs/features using the feature slug.
 ---
 
 # Grill With Docs
@@ -21,11 +21,12 @@ Read relevant:
 - `CONTEXT-MAP.md`
 - `docs/adr/`
 - `docs/agents/`
+- existing `docs/features/<feature-slug>/context.md`
 - feature docs under configured path
 - related issues/stories
 - relevant source/tests
 
-Create docs lazily. Do not create `CONTEXT.md` or ADR until a real term/decision is resolved.
+Create docs lazily. Write the grill session glossary and resolved context to `docs/features/<feature-slug>/context.md`. Use root `CONTEXT.md` only as input/reference unless the user explicitly asks to update global domain docs. Do not create ADR until a real decision is resolved.
 
 ## Question Path
 
@@ -61,14 +62,15 @@ Cross-check code when user claims current behavior. Surface contradictions.
 
 ## Documentation Updates
 
-When term resolves, update `CONTEXT.md` inline using `references/CONTEXT-FORMAT.md`.
+When term resolves, update `docs/features/<feature-slug>/context.md` inline using `references/CONTEXT-FORMAT.md`.
 
-`CONTEXT.md` is glossary only:
+`docs/features/<feature-slug>/context.md` is glossary and feature-context only:
 
 - no implementation notes
 - no specs
 - no todo list
 - no decision log
+- no global domain changes unless copied from root `CONTEXT.md` as reference
 
 Offer ADR only when all are true:
 
@@ -108,6 +110,7 @@ If final validation command is unknown after repo/CI discovery, ask exactly:
 After final question, summarize:
 
 - resolved domain terms
+- updated `docs/features/<feature-slug>/context.md`
 - business decisions
 - technical decisions
 - interface/design artifact decision
