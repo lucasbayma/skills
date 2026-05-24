@@ -1,5 +1,7 @@
 # Autonomous Feature Skills
 
+[![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
+
 Skills for planning, specifying, slicing, validating, and executing features with agent subloops.
 
 Inspired by `mattpocock/skills`: small composable skills, repo-local config in `docs/agents/`, vertical slices, TDD, explicit issue tracker, and domain docs.
@@ -17,7 +19,31 @@ Inspired by `mattpocock/skills`: small composable skills, repo-local config in `
 
 ## Usage
 
-### Install / Link
+### Install With skills.sh
+
+Install from GitHub:
+
+```bash
+npx skills@latest add lucasbayma/skills
+```
+
+Then select the skills you want in the installer.
+
+Recommended install set:
+
+- `setup-autonomous-feature-skills`
+- `caveman`
+- `grill-with-docs`
+- `huashu-design`
+- `feature-plan`
+- `feature-spec`
+- `feature-issues`
+- `feature-uat`
+- `autonomous-feature-executor`
+
+After installation, run `$setup-autonomous-feature-skills` once in each target repo.
+
+### Manual Install / Link
 
 Use this repo as a skills source for your agent, or copy/link the folders under `skills/` into the agent's skills directory.
 
