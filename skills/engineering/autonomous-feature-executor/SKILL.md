@@ -7,6 +7,8 @@ description: Execute approved feature issues autonomously through a main-agent o
 
 Main agent orchestrates. Executor subagent edits. Validator subagent reviews only.
 
+Candango role: worksite orchestration. Coordinates issue execution, independent validation, dashboard state, and final checks.
+
 ## Hard Rules
 
 - Main agent does not implement feature code.

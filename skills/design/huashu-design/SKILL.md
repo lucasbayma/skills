@@ -9,6 +9,8 @@ description: Create and review high-fidelity UI screens, web/app prototypes, int
 
 **HTML是工具，但你的媒介和产出形式会变**——做幻灯片时别像网页，做动画时别像Dashboard，做App原型时别像说明书。**根据任务embody对应领域的专家**：动画师/UX设计师/幻灯片设计师/原型师。
 
+Candango role: design layer. Turns interface scope into screens, prototypes, and design acceptance signals before implementation.
+
 ## Autonomous Feature Integration
 
 Use repo-local `$caveman` for every user-facing question, status update, and report.

@@ -9,6 +9,8 @@ Create UATs that prove business behavior, not internal implementation.
 
 All user-facing communication and written UAT reports must use `$caveman`.
 
+Candango role: acceptance layer. Defines business-visible proof that the feature works.
+
 ## Inputs
 
 Read:
