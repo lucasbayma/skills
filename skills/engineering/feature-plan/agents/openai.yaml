@@ -1,0 +1,4 @@
+interface:
+  display_name: "Feature Plan"
+  short_description: "Plan features before implementation"
+  default_prompt: "Use $feature-plan to clarify and plan this feature."
