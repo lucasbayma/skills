@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill With Docs"
+  short_description: "Stress-test plans and update docs"
+  default_prompt: "Use $grill-with-docs to challenge this feature plan against project docs."

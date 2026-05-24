@@ -1,0 +1,116 @@
+---
+name: grill-with-docs
+description: Stress-test a feature plan against the repo's domain language, docs, ADRs, business rules, UAT needs, tracker shape, validation command, and autonomous execution readiness. Use when planning a feature, clarifying ambiguous requirements, preparing feature-plan or feature-spec, or when user wants relentless questions with documentation updates.
+---
+
+# Grill With Docs
+
+Interview user until plan is precise enough for spec, issues, UATs, and autonomous execution.
+
+Ask one question at a time. For each question, provide recommended answer. 
+
+Before asking the question, check if code/docs can answer. If so, inspect repo instead of asking.
+
+Use `$caveman` style for every user-facing question, summary, and report.
+
+## Explore First
+
+Read relevant:
+
+- `CONTEXT.md`
+- `CONTEXT-MAP.md`
+- `docs/adr/`
+- `docs/agents/`
+- feature docs under configured path
+- related issues/stories
+- relevant source/tests
+
+Create docs lazily. Do not create `CONTEXT.md` or ADR until a real term/decision is resolved.
+
+## Question Path
+
+Walk decision tree in dependency order:
+
+1. Business outcome
+2. Actors and permissions
+3. Domain terms
+4. Happy path
+5. Edge/error paths
+6. Data/API contracts
+7. UX/product behavior
+8. Interface scope and design artifact decision
+9. Rollout/migration
+10. UAT acceptance
+11. Issue slicing
+12. Final validation command
+13. Autonomous execution readiness
+
+Stop when next artifact can be produced without hidden context.
+
+## Domain Rules
+
+Challenge glossary conflicts immediately:
+
+`CONTEXT says "Customer" means org, but plan uses customer as person. Which?`
+
+Sharpen fuzzy language:
+
+`"Account" overloaded. Do you mean User, Organization, or Billing Account? Recommended: Billing Account.`
+
+Cross-check code when user claims current behavior. Surface contradictions.
+
+## Documentation Updates
+
+When term resolves, update `CONTEXT.md` inline using `references/CONTEXT-FORMAT.md`.
+
+`CONTEXT.md` is glossary only:
+
+- no implementation notes
+- no specs
+- no todo list
+- no decision log
+
+Offer ADR only when all are true:
+
+- hard to reverse
+- surprising without context
+- real trade-off
+
+Use `references/ADR-FORMAT.md`.
+
+## Feature-Specific Checks
+
+Before ending, ensure answers exist for:
+
+- What user-visible behavior changes?
+- Does scope include interface work: web, app, dashboard, admin, flow, screen, layout, form, table, design system?
+- If interface scope exists, did user choose whether to create/edit layouts/screens and where: Figma, local HTML prototype, existing codebase, screenshots, or other?
+- What is out of scope?
+- Which UATs prove business success?
+- Which issue tracker should receive work?
+- Which slices are AFK vs HITL?
+- Which dependencies block issue execution?
+- What final validation command should run?
+- What manual UAT, if any, blocks `done`?
+
+If interface scope exists, ask exactly one caveman-style question before final summary:
+
+`UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.`
+
+If user agrees, use `$huashu-design` before `feature-plan` or `feature-spec` is finalized.
+
+If final validation command is unknown after repo/CI discovery, ask exactly:
+
+`Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?`
+
+## Output
+
+After final question, summarize:
+
+- resolved domain terms
+- business decisions
+- technical decisions
+- interface/design artifact decision
+- UAT signals
+- issue slicing implications
+- open questions, if any

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Huashu Design"
+  short_description: "High-fidelity UI screens and prototypes"
+  default_prompt: "Use $huashu-design to create or review UI screens/prototypes for this feature."
