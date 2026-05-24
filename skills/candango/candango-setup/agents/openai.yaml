@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Setup"
+  short_description: "Configure Candango feature workflows"
+  default_prompt: "Use $candango-setup to configure this repo for autonomous feature delivery."

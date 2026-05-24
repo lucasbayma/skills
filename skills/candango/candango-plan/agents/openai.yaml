@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Plan"
+  short_description: "Plan features before implementation"
+  default_prompt: "Use $candango-plan to clarify and plan this feature."

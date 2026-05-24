@@ -1,4 +1,0 @@
-interface:
-  display_name: "Autonomous Feature Executor"
-  short_description: "Run issue-based autonomous delivery loops"
-  default_prompt: "Use $autonomous-feature-executor to execute approved feature issues autonomously."

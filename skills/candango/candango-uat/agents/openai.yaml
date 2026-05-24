@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango UAT"
+  short_description: "Generate user acceptance tests"
+  default_prompt: "Use $candango-uat to generate UATs from this feature spec."

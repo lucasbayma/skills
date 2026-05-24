@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Executor"
+  short_description: "Run issue-based autonomous delivery loops"
+  default_prompt: "Use $candango-executor to execute approved feature issues autonomously."

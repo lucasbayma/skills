@@ -1,4 +1,0 @@
-interface:
-  display_name: "Feature Wrap-Up"
-  short_description: "Clean temp files and create feature PR"
-  default_prompt: "Use $feature-wrap-up to clean temporary dashboard files and create a PR for this feature."

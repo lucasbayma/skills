@@ -1,23 +1,23 @@
-# Autonomous Feature Skills
+# Candango Skills
 
 [![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
 
-Skills for planning, specifying, slicing, validating, and executing features with agent subloops.
+Candango-branded skills for planning, specifying, slicing, validating, and executing features with agent subloops.
 
 Inspired by `mattpocock/skills`: small composable skills, repo-local config in `docs/agents/`, vertical slices, TDD, explicit issue tracker, and domain docs.
 
 ## Quickstart
 
-1. Run `$setup-autonomous-feature-skills` in the target repo.
-2. Clarify ambiguous scope with `$grill-with-docs`.
-3. If UI scope exists, create/edit screens with `$huashu-design`.
-4. Plan the feature with `$feature-plan`.
-5. Write the technical spec with `$feature-spec`.
-6. Create tracker issues with `$feature-issues`.
-7. Generate UATs with `$feature-uat`.
-8. Execute approved issues with `$autonomous-feature-executor`.
-9. Run guided UAT with `$feature-uat-runner`.
-10. Wrap up and create PR with `$feature-wrap-up`.
+1. Run `$candango-setup` in the target repo.
+2. Clarify ambiguous scope with `$candango-discover`.
+3. If UI scope exists, create/edit screens with `$candango-design`.
+4. Plan the feature with `$candango-plan`.
+5. Write the technical spec with `$candango-spec`.
+6. Create tracker issues with `$candango-issues`.
+7. Generate UATs with `$candango-uat`.
+8. Execute approved issues with `$candango-executor`.
+9. Run guided UAT with `$candango-uat-runner`.
+10. Wrap up and create PR with `$candango-wrap-up`.
 
 ## Usage
 
@@ -33,20 +33,20 @@ Then select the skills you want in the installer.
 
 Recommended install set:
 
-- `setup-autonomous-feature-skills`
-- `caveman`
-- `grill-with-docs`
-- `huashu-design`
-- `tdd`
-- `feature-plan`
-- `feature-spec`
-- `feature-issues`
-- `feature-uat`
-- `feature-uat-runner`
-- `autonomous-feature-executor`
-- `feature-wrap-up`
+- `candango-setup`
+- `candango-caveman`
+- `candango-discover`
+- `candango-design`
+- `candango-tdd`
+- `candango-plan`
+- `candango-spec`
+- `candango-issues`
+- `candango-uat`
+- `candango-uat-runner`
+- `candango-executor`
+- `candango-wrap-up`
 
-After installation, run `$setup-autonomous-feature-skills` once in each target repo.
+After installation, run `$candango-setup` once in each target repo.
 
 ### Manual Install / Link
 
@@ -56,18 +56,19 @@ Example local layout:
 
 ```text
 skills/
-├── design/huashu-design/
-├── engineering/autonomous-feature-executor/
-├── engineering/feature-issues/
-├── engineering/feature-plan/
-├── engineering/feature-spec/
-├── engineering/feature-uat/
-├── engineering/feature-uat-runner/
-├── engineering/feature-wrap-up/
-├── engineering/grill-with-docs/
-├── engineering/setup-autonomous-feature-skills/
-├── engineering/tdd/
-└── productivity/caveman/
+└── candango/
+    ├── candango-setup/
+    ├── candango-caveman/
+    ├── candango-discover/
+    ├── candango-design/
+    ├── candango-tdd/
+    ├── candango-plan/
+    ├── candango-spec/
+    ├── candango-issues/
+    ├── candango-uat/
+    ├── candango-uat-runner/
+    ├── candango-executor/
+    └── candango-wrap-up/
 ```
 
 ### First Run In A Repo
@@ -75,7 +76,7 @@ skills/
 Run setup once per target codebase:
 
 ```text
-Use $setup-autonomous-feature-skills to configure this repo for autonomous feature delivery.
+Use $candango-setup to configure this repo for autonomous feature delivery.
 ```
 
 Setup creates repo-local config under `docs/agents/`:
@@ -91,8 +92,8 @@ Setup creates repo-local config under `docs/agents/`:
 Use when scope is clear and low risk:
 
 ```text
-Use $feature-plan to plan this small feature: <feature request>.
-Then use $feature-spec, $feature-issues, $feature-uat, and $autonomous-feature-executor.
+Use $candango-plan to plan this small feature: <feature request>.
+Then use $candango-spec, $candango-issues, $candango-uat, and $candango-executor.
 ```
 
 Expected output:
@@ -107,25 +108,25 @@ Expected output:
 
 ### Large Or Ambiguous Feature
 
-Use `grill-with-docs` first:
+Use `candango-discover` first:
 
 ```text
-Use $grill-with-docs to clarify this feature against repo docs and business rules: <feature request>.
+Use $candango-discover to clarify this feature against repo docs and business rules: <feature request>.
 ```
 
 Then:
 
 ```text
-Use $feature-plan to turn the resolved decisions into a feature plan.
-Use $feature-spec to write the technical spec.
-Use $feature-issues to create vertical-slice issues.
-Use $feature-uat to generate UATs.
-Use $autonomous-feature-executor to execute approved issues.
+Use $candango-plan to turn the resolved decisions into a feature plan.
+Use $candango-spec to write the technical spec.
+Use $candango-issues to create vertical-slice issues.
+Use $candango-uat to generate UATs.
+Use $candango-executor to execute approved issues.
 ```
 
 ### Feature With UI
 
-If `grill-with-docs` finds web/app/dashboard/forms/screens/flows/design-system scope, it asks:
+If `candango-discover` finds web/app/dashboard/forms/screens/flows/design-system scope, it asks:
 
 ```text
 UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.
@@ -134,7 +135,7 @@ UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, exi
 If yes:
 
 ```text
-Use $huashu-design to create UI screens/prototype for this feature in docs/features/<feature-slug>/design/.
+Use $candango-design to create UI screens/prototype for this feature in docs/features/<feature-slug>/design/.
 ```
 
 Then link design artifacts from:
@@ -147,7 +148,7 @@ Then link design artifacts from:
 
 ### Feature Without UI
 
-Skip `huashu-design`.
+Skip `candango-design`.
 
 Record in plan/spec:
 
@@ -160,7 +161,7 @@ Design artifacts skipped: no interface scope.
 Run after issues/UAT/spec are ready:
 
 ```text
-Use $autonomous-feature-executor to execute the approved issues for docs/features/<feature-slug>/.
+Use $candango-executor to execute the approved issues for docs/features/<feature-slug>/.
 ```
 
 Executor creates/updates:
@@ -182,20 +183,20 @@ Loop:
 Full pipeline:
 
 ```text
-Use $setup-autonomous-feature-skills if this repo is not configured.
-Use $grill-with-docs to clarify this feature:
+Use $candango-setup if this repo is not configured.
+Use $candango-discover to clarify this feature:
 
 <feature request>
 
 If interface scope exists, ask whether to create/edit layouts and where.
-Then use $feature-plan, $feature-spec, $feature-issues, $feature-uat, $autonomous-feature-executor, $feature-uat-runner, and $feature-wrap-up.
-All communication and reports must use $caveman.
+Then use $candango-plan, $candango-spec, $candango-issues, $candango-uat, $candango-executor, $candango-uat-runner, and $candango-wrap-up.
+All communication and reports must use $candango-caveman.
 ```
 
 Plan only:
 
 ```text
-Use $feature-plan to create docs/features/<feature-slug>/plan.md for:
+Use $candango-plan to create docs/features/<feature-slug>/plan.md for:
 
 <feature request>
 ```
@@ -203,44 +204,44 @@ Use $feature-plan to create docs/features/<feature-slug>/plan.md for:
 Spec only:
 
 ```text
-Use $feature-spec to create technical-spec.md from docs/features/<feature-slug>/plan.md.
+Use $candango-spec to create technical-spec.md from docs/features/<feature-slug>/plan.md.
 ```
 
 Issues only:
 
 ```text
-Use $feature-issues to create vertical-slice issues from docs/features/<feature-slug>/technical-spec.md.
+Use $candango-issues to create vertical-slice issues from docs/features/<feature-slug>/technical-spec.md.
 Target tracker: <GitHub | Linear | Jira | local markdown>.
 ```
 
 UAT only:
 
 ```text
-Use $feature-uat to generate UATs from plan/spec/issues in docs/features/<feature-slug>/.
+Use $candango-uat to generate UATs from plan/spec/issues in docs/features/<feature-slug>/.
 ```
 
 Run UAT:
 
 ```text
-Use $feature-uat-runner to guide me through UATs from docs/features/<feature-slug>/uat.md.
+Use $candango-uat-runner to guide me through UATs from docs/features/<feature-slug>/uat.md.
 ```
 
 Wrap up:
 
 ```text
-Use $feature-wrap-up to clean temporary dashboard files and create a PR for docs/features/<feature-slug>/.
+Use $candango-wrap-up to clean temporary dashboard files and create a PR for docs/features/<feature-slug>/.
 ```
 
 UI only:
 
 ```text
-Use $huashu-design to create/edit screens for docs/features/<feature-slug>/.
+Use $candango-design to create/edit screens for docs/features/<feature-slug>/.
 Target surface: <Figma | local HTML prototype | existing codebase | screenshots>.
 ```
 
 ## Communication Contract
 
-All user-facing communication and written reports must use repo-local `$caveman`.
+All user-facing communication and written reports must use repo-local `$candango-caveman`.
 
 This includes:
 
@@ -258,7 +259,7 @@ This includes:
 
 ## Feature Folder
 
-All feature-specific docs and HTML live together:
+All candango-specific docs and HTML live together:
 
 `docs/features/<feature-slug>/`
 
@@ -272,31 +273,31 @@ Default contents:
 - `state.json` execution state
 - `design/` local UI/design artifacts
 
-`index.html` and `state.json` are runtime dashboard files. `$feature-wrap-up` removes them before PR when they are not needed.
+`index.html` and `state.json` are runtime dashboard files. `$candango-wrap-up` removes them before PR when they are not needed.
 
 ## Skills
 
-- [`setup-autonomous-feature-skills`](./skills/engineering/setup-autonomous-feature-skills/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
-- [`caveman`](./skills/productivity/caveman/SKILL.md): mandatory terse user-facing communication and reports.
-- [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
-- [`huashu-design`](./skills/design/huashu-design/SKILL.md): create/review UI screens, layouts, and prototypes when feature scope includes an interface.
-- [`tdd`](./skills/engineering/tdd/SKILL.md): implement one issue at a time with red-green-refactor.
-- [`feature-plan`](./skills/engineering/feature-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
-- [`feature-spec`](./skills/engineering/feature-spec/SKILL.md): create technical spec from plan/context.
-- [`feature-issues`](./skills/engineering/feature-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
-- [`feature-uat`](./skills/engineering/feature-uat/SKILL.md): generate business-facing UAT scenarios.
-- [`autonomous-feature-executor`](./skills/engineering/autonomous-feature-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
-- [`feature-uat-runner`](./skills/engineering/feature-uat-runner/SKILL.md): guide user through UAT scenarios, mark confirmations, and restart TDD fix loops on failure.
-- [`feature-wrap-up`](./skills/engineering/feature-wrap-up/SKILL.md): clean temporary dashboard files, summarize validation/UAT, and create a PR.
+- [`candango-setup`](./skills/candango/candango-setup/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
+- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): mandatory terse user-facing communication and reports.
+- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
+- [`candango-design`](./skills/candango/candango-design/SKILL.md): create/review UI screens, layouts, and prototypes when feature scope includes an interface.
+- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): implement one issue at a time with red-green-refactor.
+- [`candango-plan`](./skills/candango/candango-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
+- [`candango-spec`](./skills/candango/candango-spec/SKILL.md): create technical spec from plan/context.
+- [`candango-issues`](./skills/candango/candango-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
+- [`candango-uat`](./skills/candango/candango-uat/SKILL.md): generate business-facing UAT scenarios.
+- [`candango-executor`](./skills/candango/candango-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
+- [`candango-uat-runner`](./skills/candango/candango-uat-runner/SKILL.md): guide user through UAT scenarios, mark confirmations, and restart TDD fix loops on failure.
+- [`candango-wrap-up`](./skills/candango/candango-wrap-up/SKILL.md): clean temporary dashboard files, summarize validation/UAT, and create a PR.
 
 ## Credits
 
 Forked/adapted skills:
 
-- [`caveman`](./skills/productivity/caveman/SKILL.md): forked from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, originally inspired by Matt Pocock's concise communication workflow.
-- [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
-- [`tdd`](./skills/engineering/tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
-- [`huashu-design`](./skills/design/huashu-design/SKILL.md): forked/adapted from local [`huashu-design`](https://github.com/alchaincyf/huashu-design)-style skill at `/Users/bayma/.agents/skills/huashu-design/SKILL.md`.
+- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): forked/adapted from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, with inspiration from Matt Pocock's concise communication workflow.
+- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
+- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
+- [`candango-design`](./skills/candango/candango-design/SKILL.md): forked/adapted from local `huashu-design` at `/Users/bayma/.agents/skills/huashu-design/SKILL.md`, based on [`alchaincyf/huashu-design`](https://github.com/alchaincyf/huashu-design).
 
 Architecture reference:
 

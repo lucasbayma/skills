@@ -1,4 +1,0 @@
-interface:
-  display_name: "Setup Autonomous Feature Skills"
-  short_description: "Configure autonomous feature workflows"
-  default_prompt: "Use $setup-autonomous-feature-skills to configure this repo for autonomous feature delivery."
