@@ -1,4 +1,4 @@
-# CONTEXT.md Format
+# Feature context.md Format
 
 ## Structure
 
@@ -33,10 +33,12 @@ _Avoid_: Client, buyer, account
 - Group under subheadings when natural.
 - Add example dialogue when it clarifies boundaries.
 
-## Single vs Multi-Context
+## Location
 
-Single context: root `CONTEXT.md`.
+Feature grill output lives at:
 
-Multi-context: root `CONTEXT-MAP.md` points to context-specific `CONTEXT.md` files.
+`docs/features/<feature-slug>/context.md`
 
-When multiple contexts exist, infer relevant context. If unclear, ask.
+Root `CONTEXT.md` and `CONTEXT-MAP.md` are inputs only unless the user explicitly asks to update global domain docs.
+
+When multiple contexts exist, infer relevant source context and cite it in the feature context file. If unclear, ask.

@@ -18,7 +18,8 @@ Read:
 - technical spec
 - issue acceptance criteria
 - design artifacts from `huashu-design` when interface scope exists
-- `CONTEXT.md`
+- `docs/features/<feature-slug>/context.md`
+- root `CONTEXT.md` as reference input
 - product/domain docs
 
 ## Workflow

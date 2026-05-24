@@ -91,6 +91,7 @@ Then use $feature-spec, $feature-issues, $feature-uat, and $autonomous-feature-e
 
 Expected output:
 
+- `docs/features/<feature-slug>/context.md`
 - `docs/features/<feature-slug>/plan.md`
 - `technical-spec.md`
 - `issues.md`
@@ -133,6 +134,7 @@ Use $huashu-design to create UI screens/prototype for this feature in docs/featu
 Then link design artifacts from:
 
 - `plan.md`
+- `context.md`
 - `technical-spec.md`
 - issues
 - `uat.md`
@@ -254,7 +256,7 @@ Default contents:
 
 - [`setup-autonomous-feature-skills`](./skills/engineering/setup-autonomous-feature-skills/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
 - [`caveman`](./skills/productivity/caveman/SKILL.md): mandatory terse user-facing communication and reports.
-- [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): stress-test feature plans against domain docs and update glossary/ADRs.
+- [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
 - [`huashu-design`](./skills/design/huashu-design/SKILL.md): create/review UI screens, layouts, and prototypes when feature scope includes an interface.
 - [`tdd`](./skills/engineering/tdd/SKILL.md): implement one issue at a time with red-green-refactor.
 - [`feature-plan`](./skills/engineering/feature-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
