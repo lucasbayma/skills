@@ -1,4 +1,0 @@
-interface:
-  display_name: "Feature UAT"
-  short_description: "Generate user acceptance tests"
-  default_prompt: "Use $feature-uat to generate UATs from this feature spec."

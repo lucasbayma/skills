@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Wrap-Up"
+  short_description: "Clean temp files and create feature PR"
+  default_prompt: "Use $candango-wrap-up to clean temporary dashboard files and create a PR for this feature."

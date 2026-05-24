@@ -1,4 +1,0 @@
-interface:
-  display_name: "Feature Issues"
-  short_description: "Break specs into tracker issues"
-  default_prompt: "Use $feature-issues to create implementation issues from this spec."

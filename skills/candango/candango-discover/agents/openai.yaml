@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Discover"
+  short_description: "Stress-test plans and write context"
+  default_prompt: "Use $candango-discover to challenge this feature plan against project docs."

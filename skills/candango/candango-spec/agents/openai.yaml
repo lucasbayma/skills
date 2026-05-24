@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Spec"
+  short_description: "Write technical feature specs"
+  default_prompt: "Use $candango-spec to write a technical spec for this feature."

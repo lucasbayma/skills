@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candango Caveman"
+  short_description: "Mandatory terse user-facing reports"
+  default_prompt: "Use $candango-caveman for all user-facing communication and written reports."
