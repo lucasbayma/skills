@@ -53,6 +53,7 @@ def load_state(path: Path) -> dict[str, Any]:
         return {
             "feature": {"title": "Untitled feature", "summary": ""},
             "issues": [],
+            "active_agents": [],
             "events": [],
             "final_validation": {"command": "", "status": "pending", "summary": ""},
         }
@@ -104,6 +105,16 @@ def issue_execution_time(issue: dict[str, Any]) -> str:
         elapsed = datetime.now(timezone.utc) - started
         return f"running {format_duration(elapsed.total_seconds())}"
     return "not recorded"
+
+
+def active_agents(state: dict[str, Any]) -> list[dict[str, Any]]:
+    agents = []
+    for agent in state.get("active_agents", []):
+        status = agent.get("status", "running")
+        if status in {"done", "complete", "completed", "finished", "stopped"}:
+            continue
+        agents.append(agent)
+    return agents
 
 
 def render_tree(issues: list[dict[str, Any]]) -> str:
@@ -289,6 +300,51 @@ def render_events(events: list[dict[str, Any]]) -> str:
     return "<ol class=\"events\">" + "".join(rows) + "</ol>"
 
 
+def render_active_agents(agents: list[dict[str, Any]]) -> str:
+    if not agents:
+        return ""
+
+    panels = []
+    for agent in agents:
+        agent_id = html.escape(agent.get("id", "agent"))
+        role = html.escape(agent.get("role", "subagent"))
+        issue_id = html.escape(agent.get("issue_id", "feature"))
+        session = html.escape(agent.get("session", "session"))
+        status = html.escape(agent.get("status", "running"))
+        started_at = html.escape(agent.get("started_at", ""))
+        summary = html.escape(agent.get("summary", ""))
+        output = html.escape(agent.get("output", ""))
+        output_html = output or "No output yet."
+        meta = (
+            '<div class="agent-meta">'
+            f"<span>{role}</span>"
+            f"<span>{issue_id}</span>"
+            f"<span>{status}</span>"
+            f"<span>{session}</span>"
+            + (f"<span>{started_at}</span>" if started_at else "")
+            + "</div>"
+        )
+        panels.append(
+            '<details class="agent-session" open data-toggle-key="agent-'
+            + agent_id
+            + '">'
+            f"<summary><strong>{agent_id}</strong><span>{role} / {issue_id}</span></summary>"
+            + meta
+            + (f'<p class="agent-summary">{summary}</p>' if summary else "")
+            + f'<pre class="agent-output">{output_html}</pre>'
+            + "</details>"
+        )
+
+    return (
+        '<details class="toggle-section" open data-toggle-key="active-agents">'
+        "<summary><h2>Active Agents</h2></summary>"
+        '<section class="panel agent-list">'
+        + "".join(panels)
+        + "</section>"
+        "</details>"
+    )
+
+
 def render_html(state: dict[str, Any]) -> str:
     feature = state.get("feature", {})
     validation = state.get("final_validation", {})
@@ -342,6 +398,18 @@ def render_html(state: dict[str, Any]) -> str:
     .toggle-section[open] summary::before {{ transform:rotate(90deg); }}
     .toggle-section summary h2 {{ margin:0; }}
     .toggle-section .panel {{ margin-top:12px; }}
+    .agent-list {{ display:grid; gap:10px; }}
+    .agent-session {{ border:1px solid var(--line); border-radius:8px; background:#fbfcfe; }}
+    .agent-session summary {{ display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; }}
+    .agent-session summary::-webkit-details-marker {{ display:none; }}
+    .agent-session summary::marker {{ content:""; }}
+    .agent-session summary::before {{ content:""; width:0; height:0; border-top:4px solid transparent; border-bottom:4px solid transparent; border-left:6px solid var(--muted); transform:rotate(0deg); transition:transform .12s ease; }}
+    .agent-session[open] summary::before {{ transform:rotate(90deg); }}
+    .agent-session summary span {{ color:var(--muted); font-size:12px; }}
+    .agent-meta {{ display:flex; flex-wrap:wrap; gap:8px; padding:0 12px 8px; }}
+    .agent-meta span {{ color:var(--muted); background:#eef2f7; border-radius:999px; padding:2px 8px; font-size:12px; }}
+    .agent-summary {{ margin:0; padding:0 12px 8px; color:var(--muted); }}
+    .agent-output {{ max-height:360px; overflow:auto; margin:0; padding:12px; border-top:1px solid var(--line); background:#101828; color:#f2f4f7; border-radius:0 0 8px 8px; font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space:pre-wrap; }}
     .validation {{ display:grid; gap:4px; }}
     .events {{ list-style:none; padding:0; margin:0; }}
     .events li {{ display:grid; grid-template-columns:180px 90px 110px 1fr; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }}
@@ -358,7 +426,8 @@ def render_html(state: dict[str, Any]) -> str:
   <main>
     <h2>Kanban</h2>
     {render_kanban(state.get("issues", []))}
-    <details class="toggle-section" open>
+    {render_active_agents(active_agents(state))}
+    <details class="toggle-section" open data-toggle-key="issue-tree">
       <summary><h2>Issue Tree</h2></summary>
       <section class="panel">{render_tree(state.get("issues", []))}</section>
     </details>
@@ -368,15 +437,15 @@ def render_html(state: dict[str, Any]) -> str:
       <code>{html.escape(validation.get("command", ""))}</code>
       <span>{html.escape(validation.get("summary", ""))}</span>
     </section>
-    <details class="toggle-section" open>
+    <details class="toggle-section" open data-toggle-key="execution-history">
       <summary><h2>Execution History</h2></summary>
       <section class="panel">{render_events(state.get("events", []))}</section>
     </details>
   </main>
   <script>
     const refreshDelay = {auto_refresh_ms};
-    document.querySelectorAll(".toggle-section").forEach((section, index) => {{
-      const key = `dashboard-toggle-${{index}}`;
+    document.querySelectorAll(".toggle-section, .agent-session").forEach((section, index) => {{
+      const key = `dashboard-toggle-${{section.dataset.toggleKey || index}}`;
       const saved = localStorage.getItem(key);
       if (saved === "open") section.open = true;
       if (saved === "closed") section.open = false;
@@ -414,6 +483,35 @@ def parse_issue(raw: str) -> dict[str, Any]:
     return issue
 
 
+def upsert_active_agent(
+    state: dict[str, Any],
+    agent_id: str,
+    updates: dict[str, str],
+    append_output: bool = False,
+) -> None:
+    agents = state.setdefault("active_agents", [])
+    agent = next((item for item in agents if item.get("id") == agent_id), None)
+    if agent is None:
+        agent = {"id": agent_id, "status": "running", "started_at": now()}
+        agents.append(agent)
+
+    output = updates.pop("output", None)
+    for key, value in updates.items():
+        if value is not None:
+            agent[key] = value
+    if output is not None:
+        if append_output and agent.get("output"):
+            agent["output"] = agent["output"].rstrip() + "\n" + output
+        else:
+            agent["output"] = output
+
+
+def remove_active_agent(state: dict[str, Any], agent_id: str) -> None:
+    state["active_agents"] = [
+        agent for agent in state.get("active_agents", []) if agent.get("id") != agent_id
+    ]
+
+
 def render_to_file(state: dict[str, Any], html_path: Path) -> None:
     html_path.parent.mkdir(parents=True, exist_ok=True)
     html_path.write_text(render_html(state))
@@ -449,6 +547,21 @@ def main() -> None:
     event.add_argument("--actor", default="main")
     event.add_argument("--summary", required=True)
 
+    agent = sub.add_parser("agent")
+    agent.add_argument("--id", required=True)
+    agent.add_argument("--role")
+    agent.add_argument("--issue-id")
+    agent.add_argument("--session")
+    agent.add_argument("--status")
+    agent.add_argument("--summary")
+    agent.add_argument("--started-at")
+    agent.add_argument("--output")
+    agent.add_argument("--output-file", type=Path)
+    agent.add_argument("--append-output", action="store_true")
+
+    agent_remove = sub.add_parser("agent-remove")
+    agent_remove.add_argument("--id", required=True)
+
     validation = sub.add_parser("validation")
     validation.add_argument("--command", dest="validation_command")
     validation.add_argument("--status", default="pending")
@@ -462,6 +575,7 @@ def main() -> None:
     if args.action == "init":
         state["feature"] = {"title": args.title, "summary": args.summary}
         state["issues"] = [parse_issue(raw) for raw in args.issue]
+        state["active_agents"] = state.get("active_agents", [])
         state["events"] = state.get("events", [])
         state["final_validation"] = {
             "command": args.validation_command,
@@ -491,6 +605,26 @@ def main() -> None:
                 "summary": args.summary,
             }
         )
+    elif args.action == "agent":
+        output = args.output
+        if args.output_file:
+            output = args.output_file.read_text()
+        upsert_active_agent(
+            state,
+            args.id,
+            {
+                "role": args.role,
+                "issue_id": args.issue_id,
+                "session": args.session,
+                "status": args.status,
+                "summary": args.summary,
+                "started_at": args.started_at,
+                "output": output,
+            },
+            append_output=args.append_output,
+        )
+    elif args.action == "agent-remove":
+        remove_active_agent(state, args.id)
     elif args.action == "validation":
         state["final_validation"] = {
             "command": args.validation_command or state.get("final_validation", {}).get("command", ""),

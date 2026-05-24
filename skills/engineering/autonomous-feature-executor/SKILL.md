@@ -58,6 +58,7 @@ Create:
 Dashboard must show:
 
 - issue dependency tree with links
+- active subagent session output panels
 - Kanban columns: `backlog`, `in-progress`, `validation`, `uat`, `done`
 - execution history panel with caveman reports
 - final validation command/status
@@ -70,7 +71,7 @@ For each unblocked issue:
 
 1. Move issue to `in-progress`.
 2. Start executor subagent with prompt from `references/executor-prompt.md`.
-3. Poll every 1 minute. Update dashboard with health/status.
+3. Poll every 1 minute. Update dashboard with health/status and active subagent output.
 4. When executor finishes, move issue to `validation`.
 5. Start validator subagent with prompt from `references/validator-prompt.md`.
 6. If validator passes, move issue to `uat` when UAT/manual acceptance remains, else `done`.
