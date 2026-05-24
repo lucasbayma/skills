@@ -1,10 +1,12 @@
-# Autonomous Feature Skills
+# Candango Skills
 
 [![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
 
-Skills for planning, specifying, slicing, validating, and executing features with agent subloops.
+Candango Skills is a coordinated set of agent skills for building software features from intent to validated execution.
 
 Inspired by `mattpocock/skills`: small composable skills, repo-local config in `docs/agents/`, vertical slices, TDD, explicit issue tracker, and domain docs.
+
+`Candango` is the project identity: a builder-oriented workflow for coordinating planning, design, issue slicing, testing, validation, UAT, wrap-up, and execution into one feature worksite.
 
 ## Quickstart
 
@@ -75,7 +77,7 @@ skills/
 Run setup once per target codebase:
 
 ```text
-Use $setup-autonomous-feature-skills to configure this repo for autonomous feature delivery.
+Use $setup-autonomous-feature-skills to configure this repo for Candango delivery.
 ```
 
 Setup creates repo-local config under `docs/agents/`:
@@ -84,7 +86,7 @@ Setup creates repo-local config under `docs/agents/`:
 - feature folder layout
 - design artifact rules
 - validation command
-- autonomous execution rules
+- Candango execution rules
 
 ### Small Feature
 

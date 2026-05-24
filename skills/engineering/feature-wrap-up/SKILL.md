@@ -9,6 +9,8 @@ Finalize feature work and create a PR.
 
 All user-facing communication and PR text must use `$caveman`.
 
+Candango role: handover layer. Cleans temporary worksite files, verifies delivery evidence, and prepares the PR.
+
 ## Inputs
 
 Read:

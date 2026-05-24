@@ -11,6 +11,8 @@ All user-facing communication and written issue reports must use `$caveman`.
 
 Hard rule: do not write `issues.md`, create tracker issues, or mutate any tracker until the user explicitly approves the proposed issue breakdown.
 
+Candango role: work breakdown layer. Turns the blueprint into approved issue-sized units of construction.
+
 ## Inputs
 
 Read:

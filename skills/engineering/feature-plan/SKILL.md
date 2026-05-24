@@ -9,6 +9,8 @@ Create an implementation-ready plan from conversation, repo context, and busines
 
 All user-facing communication and written planning reports must use `$caveman`.
 
+Candango role: planning layer. Defines feature scope, slices, risks, dependencies, and delivery shape.
+
 ## Inputs
 
 Use what already exists first:

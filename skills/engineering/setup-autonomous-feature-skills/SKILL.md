@@ -1,11 +1,13 @@
 ---
 name: setup-autonomous-feature-skills
-description: Configure a repo for autonomous feature delivery skills. Use before feature-plan, feature-spec, feature-issues, feature-uat, feature-uat-runner, autonomous-feature-executor, or feature-wrap-up when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions.
+description: Configure a repo for Candango delivery skills. Use before feature-plan, feature-spec, feature-issues, feature-uat, feature-uat-runner, autonomous-feature-executor, or feature-wrap-up when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions.
 ---
 
-# Setup Autonomous Feature Skills
+# Setup Candango Skills
 
-Scaffold per-repo config consumed by the feature delivery skills.
+Scaffold per-repo config consumed by the Candango delivery skills.
+
+Candango role: setup layer. Prepares a repo so the full Candango workflow can run with known docs, tracker, validation, design, UAT, and execution rules.
 
 Borrow Matt Pocock's pattern: keep skills small, compose them through repo-local docs, and make tracker/domain choices explicit before work starts.
 
@@ -64,7 +66,7 @@ Stop until the user approves. Do not modify `CLAUDE.md`, `AGENTS.md`, or create 
 Add or update one block:
 
 ```markdown
-## Autonomous feature skills
+## Candango skills
 
 ### Issue tracker
 

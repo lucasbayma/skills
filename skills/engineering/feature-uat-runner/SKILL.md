@@ -9,6 +9,8 @@ Run UATs from `docs/features/<feature-slug>/uat.md` one scenario at a time.
 
 All user-facing communication and written UAT reports must use `$caveman`.
 
+Candango role: acceptance execution layer. Guides UAT runs, records evidence, and routes failures back into the build loop.
+
 ## Inputs
 
 Read:

@@ -7,6 +7,8 @@ description: Stress-test a feature plan against the repo's domain language, docs
 
 Interview user until plan is precise enough for spec, issues, UATs, and autonomous execution.
 
+Candango role: discovery layer. Turns fuzzy intent into feature-scoped context before the build starts.
+
 Ask one question at a time. For each question, provide recommended answer. 
 
 Before asking the question, check if code/docs can answer. If so, inspect repo instead of asking.

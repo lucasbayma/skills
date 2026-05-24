@@ -9,6 +9,8 @@ Turn approved plan into technical spec another agent can implement without hidde
 
 All user-facing communication and written spec reports must use `$caveman`.
 
+Candango role: technical blueprint. Converts the plan into contracts, architecture, tests, rollout, and validation.
+
 ## Preconditions
 
 Prefer `feature-plan` first unless feature is tiny and already clear.

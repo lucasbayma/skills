@@ -9,6 +9,8 @@ Use `$caveman` for every user-facing update and final report.
 
 Executor subagent uses this skill for one issue at a time. Main agent does not implement code.
 
+Candango role: build discipline. Converts one approved issue into tested behavior through red-green-refactor.
+
 ## Philosophy
 
 Tests verify behavior through public interfaces, not implementation details. Code can change; behavior contract stays.
