@@ -101,7 +101,7 @@ If user agrees, use `$huashu-design` before `feature-plan` or `feature-spec` is 
 
 If final validation command is unknown after repo/CI discovery, ask exactly:
 
-`Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?`
+`Is there any command you want me to run at the end of feature development?`
 
 ## Output
 

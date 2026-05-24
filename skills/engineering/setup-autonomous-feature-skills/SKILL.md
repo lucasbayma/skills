@@ -30,7 +30,7 @@ Required decisions:
 
 - **Issue tracker**: GitHub Issues, Linear, Jira, local markdown, or other.
 - **Feature folder layout**: all docs, dashboard HTML, state JSON, design artifacts, and local issues live under `docs/features/<feature-slug>/`.
-- **Final validation command**: discovered from CI when possible; otherwise ask: `Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?`
+- **Final validation command**: discovered from CI when possible; otherwise ask: `Is there any command you want me to run at the end of feature development?`
 - **Dashboard path**: `docs/features/<feature-slug>/index.html`.
 - **Dashboard state path**: `docs/features/<feature-slug>/state.json`.
 - **Design artifact path/surface**: default ask per feature; local artifacts go under `docs/features/<feature-slug>/design/`; external options Figma, existing codebase, screenshots, other.

@@ -61,7 +61,7 @@ Final validation command:
 Discovery rules:
 - Prefer CI commands from `.github/workflows/`.
 - Else use package/task runner scripts that match CI intent.
-- Else ask user: "Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?"
+- Else ask user: "Is there any command you want me to run at the end of feature development?"
 
 Feature is complete only when selected issues are done and final command passes, unless user accepts risk.
 ```

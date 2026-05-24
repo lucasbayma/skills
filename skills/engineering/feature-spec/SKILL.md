@@ -69,7 +69,7 @@ Prefer behavior tests through public interfaces. Include:
 
 If final command is not discoverable from CI/package scripts, ask user exactly:
 
-`Existe algum comando que deseja que eu execute ao final do desenvolvimento da feature?`
+`Is there any command you want me to run at the end of feature development?`
 
 ### 4. Write Spec
 
