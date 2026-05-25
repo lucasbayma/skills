@@ -2,36 +2,17 @@
 
 [![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
 
-Candango-branded skills for planning, specifying, slicing, validating, and executing features with agent subloops.
-
-Inspired by `mattpocock/skills`: small composable skills, repo-local config in `docs/agents/`, vertical slices, TDD, explicit issue tracker, and domain docs.
-
-## Quickstart
-
-1. Run `$candango-setup` in the target repo.
-2. Clarify ambiguous scope with `$candango-discover`.
-3. If UI scope exists, coordinate design work with `$candango-design`.
-4. Plan the feature with `$candango-plan`.
-5. Write the technical spec with `$candango-spec`.
-6. Create tracker issues with `$candango-issues`.
-7. Generate UATs with `$candango-uat`.
-8. Execute approved issues with `$candango-executor`.
-9. Run guided UAT with `$candango-uat-runner`.
-10. Wrap up and create PR with `$candango-wrap-up`.
+Candango is a set of skills for taking a feature from repo setup to UAT, with planning, specification, vertical issues, autonomous execution, TDD, external validation, and wrap-up.
 
 ## Usage
 
-### Install With skills.sh
-
-Install from GitHub:
+Install with `skills.sh`:
 
 ```bash
 npx skills@latest add lucasbayma/skills
 ```
 
-Then select the skills you want in the installer.
-
-Recommended install set:
+Select the recommended set:
 
 - `candango-setup`
 - `candango-caveman`
@@ -42,296 +23,140 @@ Recommended install set:
 - `candango-spec`
 - `candango-issues`
 - `candango-uat`
-- `candango-uat-runner`
 - `candango-executor`
+- `candango-uat-runner`
 - `candango-wrap-up`
 
-After installation, run `$candango-setup` once in each target repo.
-
-### Manual Install / Link
-
-Use this repo as a skills source for your agent, or copy/link the folders under `skills/` into the agent's skills directory.
-
-Example local layout:
-
-```text
-skills/
-└── candango/
-    ├── candango-setup/
-    ├── candango-caveman/
-    ├── candango-discover/
-    ├── candango-design/
-    ├── candango-tdd/
-    ├── candango-plan/
-    ├── candango-spec/
-    ├── candango-issues/
-    ├── candango-uat/
-    ├── candango-uat-runner/
-    ├── candango-executor/
-    └── candango-wrap-up/
-```
-
-### First Run In A Repo
-
-Run setup once per target codebase:
+Run setup once in each target repo:
 
 ```text
 Use $candango-setup to configure this repo for autonomous feature delivery.
 ```
 
-Setup creates repo-local config under `docs/agents/`:
-
-- issue tracker
-- feature folder layout
-- design artifact rules
-- validation command
-- autonomous execution rules
-
-### Small Feature
-
-Use when scope is clear and low risk:
+Use the full flow when you want to deliver a feature end to end:
 
 ```text
-Use $candango-plan to plan this small feature: <feature request>.
-Then use $candango-spec, $candango-issues, $candango-uat, and $candango-executor.
-```
-
-Expected output:
-
-- `docs/features/<feature-slug>/context.md`
-- `docs/features/<feature-slug>/plan.md`
-- `technical-spec.md`
-- `issues.md`
-- `uat.md`
-- `index.html`
-- `state.json`
-
-### Large Or Ambiguous Feature
-
-Use `candango-discover` first:
-
-```text
-Use $candango-discover to clarify this feature against repo docs and business rules: <feature request>.
-```
-
-Then:
-
-```text
-Use $candango-plan to turn the resolved decisions into a feature plan.
-Use $candango-spec to write the technical spec.
-Use $candango-issues to create vertical-slice issues.
-Use $candango-uat to generate UATs.
-Use $candango-executor to execute approved issues.
-```
-
-### Feature With UI
-
-If `candango-discover` finds web/app/dashboard/forms/screens/flows/design-system scope, it asks:
-
-```text
-UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.
-```
-
-If yes:
-
-```text
-Use $candango-design to locate the design system and coordinate UI work for this feature in docs/features/<feature-slug>/design/.
-```
-
-Then link design artifacts from:
-
-- `plan.md`
-- `context.md`
-- `technical-spec.md`
-- issues
-- `uat.md`
-
-### Feature Without UI
-
-Skip `candango-design`.
-
-Record in plan/spec:
-
-```text
-Design artifacts skipped: no interface scope.
-```
-
-### Autonomous Execution
-
-Run after issues/UAT/spec are ready:
-
-```text
-Use $candango-executor to execute the approved issues for docs/features/<feature-slug>/.
-```
-
-Executor creates/updates:
-
-- `docs/features/<feature-slug>/index.html`
-- `docs/features/<feature-slug>/state.json`
-
-Loop:
-
-1. Main agent discovers unblocked issues.
-2. Executor subagent implements with TDD.
-3. Validator subagent reviews without executor context.
-4. Main agent sends fixes back if needed.
-5. Main agent runs final validation command.
-6. Dashboard updates after every major event.
-
-### Prompts
-
-Full pipeline:
-
-```text
-Use $candango-setup if this repo is not configured.
 Use $candango-discover to clarify this feature:
 
 <feature request>
 
-If interface scope exists, ask whether to create/edit layouts and where.
-Then use $candango-plan, $candango-spec, $candango-issues, $candango-uat, $candango-executor, $candango-uat-runner, and $candango-wrap-up.
+Then use $candango-plan, $candango-spec, $candango-issues, $candango-uat,
+$candango-executor, $candango-uat-runner, and $candango-wrap-up.
 All communication and reports must use $candango-caveman.
 ```
 
-Plan only:
+For a small feature that is already clear:
 
 ```text
-Use $candango-plan to create docs/features/<feature-slug>/plan.md for:
+Use $candango-plan to plan this small feature:
 
 <feature request>
+
+Then use $candango-spec, $candango-issues, $candango-uat, and
+$candango-executor.
 ```
 
-Spec only:
+If the feature includes screens, flows, dashboards, apps, forms, or any visual surface, run `candango-design` before finalizing the plan, spec, and issues:
 
 ```text
-Use $candango-spec to create technical-spec.md from docs/features/<feature-slug>/plan.md.
+Use $candango-design to locate the design system and coordinate UI work for this feature.
+Target surface: local HTML prototype.
 ```
 
-Issues only:
+## Full Loop
 
-```text
-Use $candango-issues to create vertical-slice issues from docs/features/<feature-slug>/technical-spec.md.
-Target tracker: <GitHub | Linear | Jira | local markdown>.
-```
+### Development Cycle
 
-UAT only:
+![Full Candango development cycle](./docs/calango-development-cycle.svg)
 
-```text
-Use $candango-uat to generate UATs from plan/spec/issues in docs/features/<feature-slug>/.
-```
+### Executor Cycle
 
-Run UAT:
+![Executor loop with TDD and external validation](./docs/executor-cycle.svg)
 
-```text
-Use $candango-uat-runner to guide me through UATs from docs/features/<feature-slug>/uat.md.
-```
-
-Wrap up:
-
-```text
-Use $candango-wrap-up to clean temporary dashboard files and create a PR for docs/features/<feature-slug>/.
-```
-
-UI only:
-
-```text
-Use $candango-design to locate the design system and coordinate UI work for docs/features/<feature-slug>/.
-Target surface: <Figma | local HTML prototype | existing codebase | screenshots>.
-```
-
-## Communication Contract
-
-All user-facing communication and written reports must use repo-local `$candango-caveman`.
-
-This includes:
-
-- planning summaries
-- clarification questions
-- technical spec summaries
-- issue breakdown reports
-- UAT reports
-- UAT run confirmations
-- executor reports
-- validator reports
-- dashboard history
-- final completion reports
-- PR descriptions
-
-## Feature Folder
-
-All candango-specific docs and HTML live together:
-
-`docs/features/<feature-slug>/`
-
-Default contents:
-
-- `plan.md`
-- `technical-spec.md`
-- `uat.md`
-- `issues.md`
-- `index.html` execution dashboard
-- `state.json` execution state
-- `design/` local UI/design artifacts
-
-`index.html` and `state.json` are runtime dashboard files. `$candango-wrap-up` removes them before PR when they are not needed.
+The key point: the executor that implements the work does not validate its own work. It writes code with TDD; another subagent, without the executor's conversation context and without permission to edit, reviews the diff against the spec, issue, and UAT. If validation fails, the main agent turns the report into another TDD round. Manual UAT and final repo validation happen only after that.
 
 ## Skills
 
-- [`candango-setup`](./skills/candango/candango-setup/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
-- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): mandatory terse user-facing communication and reports.
-- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
-- [`candango-design`](./skills/candango/candango-design/SKILL.md): reuse repo design systems and place UI work correctly when feature scope includes an interface.
-- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): implement one issue at a time with red-green-refactor.
-- [`candango-plan`](./skills/candango/candango-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
-- [`candango-spec`](./skills/candango/candango-spec/SKILL.md): create technical spec from plan/context.
-- [`candango-issues`](./skills/candango/candango-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
-- [`candango-uat`](./skills/candango/candango-uat/SKILL.md): generate business-facing UAT scenarios.
-- [`candango-executor`](./skills/candango/candango-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
-- [`candango-uat-runner`](./skills/candango/candango-uat-runner/SKILL.md): guide user through UAT scenarios, mark confirmations, and restart TDD fix loops on failure.
-- [`candango-wrap-up`](./skills/candango/candango-wrap-up/SKILL.md): clean temporary dashboard files, summarize validation/UAT, and create a PR.
+### [`candango-setup`](./skills/candango/candango-setup/SKILL.md)
 
-## Credits
+Configures the repo for the Candango flow. It discovers or asks which tracker to use, where feature docs live, which command validates the work, where to save the dashboard, how to handle design artifacts, and which rules agents must follow.
 
-Forked/adapted skills:
+It creates local documentation so the other skills do not depend on conversation memory. Run it once per repo, and run it again only when changing tracker, docs convention, or validation process.
 
-- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): forked/adapted from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, with inspiration from Matt Pocock's concise communication workflow.
-- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
-- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
-- [`candango-design`](./skills/candango/candango-design/SKILL.md): coordinates Candango UI design-system discovery and delegates execution to existing UI/design skills.
+### [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md)
 
-Architecture reference:
+Defines the flow's communication style: short, direct, no filler, while preserving technical substance. The goal is to reduce noise in plans, specs, issues, executor reports, validator reports, dashboard history, UAT, and PRs.
 
-- [`mattpocock/skills`](https://github.com/mattpocock/skills): composable skills, repo-local `docs/agents/` config, issue tracker setup, domain docs, vertical slices.
+Use it when you want the whole cycle to produce high-signal responses and reports.
 
-## Execution Model
+### [`candango-discover`](./skills/candango/candango-discover/SKILL.md)
 
-Main agent:
+Clarifies a feature before planning. It reads docs, ADRs, domain context, repo configs, and relevant code before asking questions. When it asks, it asks one question at a time, with a recommended answer.
 
-- discovers executable issues
-- builds issue dependency tree
-- creates/updates HTML dashboard
-- delegates implementation to executor subagent
-- delegates review to validator subagent
-- loops until validation passes
-- runs final validation command
+Use it to resolve ambiguous terms, business rules, actors, permissions, happy paths, errors, contracts, UX, rollout, UAT, slicing, final validation, and autonomous-execution readiness. The result is enough feature context for the plan, spec, issues, and UAT.
 
-Executor subagent:
+### [`candango-design`](./skills/candango/candango-design/SKILL.md)
 
-- uses TDD
-- edits code
-- reports changed files, tests, risks
+Runs when the feature has an interface: web screen, app, dashboard, admin panel, onboarding, checkout, settings, form, table, flow, or visual change. It locates the design system, coordinates UI work, and makes sure design artifacts are available before the plan and spec are finalized.
 
-Validator subagent:
+The recommended path is a local HTML prototype first, then porting into the real codebase. Generated artifacts become references for the plan, spec, issues, and visual UAT.
 
-- receives issue/spec/UAT and diff
-- receives no executor chat context
-- does not edit code
-- returns pass/fix report
+### [`candango-plan`](./skills/candango/candango-plan/SKILL.md)
 
-Dashboard statuses:
+Turns the request, context, and decisions into an implementation-ready plan. It records the problem, users, expected outcome, non-goals, constraints, risks, decisions, and vertical slices.
 
-- `backlog`
-- `in-progress`
-- `validation`
-- `uat`
-- `done`
+The skill classifies a feature as small, medium, or large. For each slice, it defines outcome, dependencies, acceptance signals, risk, and whether it can run AFK or needs HITL.
+
+### [`candango-spec`](./skills/candango/candango-spec/SKILL.md)
+
+Turns the approved plan into a technical specification. It describes architecture, contracts, data, permissions, errors, observability, test strategy, validation, and rollout.
+
+The spec should let another agent implement without hidden context, let the validator review without inventing requirements, and let issues be created without becoming a horizontal list of layers.
+
+### [`candango-issues`](./skills/candango/candango-issues/SKILL.md)
+
+Breaks the plan and spec into vertical, executable issues. Each issue should be small enough to validate independently, but complete enough to deliver observable behavior.
+
+It models dependencies, `blocked_by`, `unblocks`, parent, acceptance criteria, AFK/HITL type, validation expectations, and links to UAT/design when they exist. Before writing or publishing issues, it shows the proposed breakdown and waits for approval.
+
+### [`candango-uat`](./skills/candango/candango-uat/SKILL.md)
+
+Generates acceptance scenarios from business rules, the plan, spec, issues, and design artifacts. The focus is external behavior, not internal detail.
+
+UATs use Given/When/Then, have priority, indicate whether they are automated, manual, or both, and point to which acceptance criteria they prove. During execution, the validator uses these UATs as the business oracle.
+
+### [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md)
+
+The skill the executor uses to implement one issue at a time. The cycle is RED, GREEN, REFACTOR: one behavior test fails, the smallest implementation passes, and cleanup happens only while everything is green.
+
+Tests should go through public interfaces, survive refactors, and verify real behavior. The executor output always includes the issue, implemented behavior, tests, changed files, commands, and risks.
+
+### [`candango-executor`](./skills/candango/candango-executor/SKILL.md)
+
+Orchestrates autonomous execution. The main agent picks unblocked issues, updates the dashboard, starts an executor with `candango-tdd`, starts an independent validator, decides whether to return to fixes, UAT, or done, and runs final validation.
+
+The executor may edit code. The validator does not edit; it receives the diff, spec, issue, and UAT, but not the executor conversation. This forces external validation instead of self-approval.
+
+### [`candango-uat-runner`](./skills/candango/candango-uat-runner/SKILL.md)
+
+Runs manual or semi-automated UAT after implementation. It guides one scenario at a time, runs automated checks when possible, gives clear manual steps to the user, and records passed, failed, or blocked status.
+
+When a UAT fails, it captures repro steps, expected behavior, actual behavior, evidence, and related context, then sends that package to `candango-executor` to restart the fix loop with TDD and validation.
+
+### [`candango-wrap-up`](./skills/candango/candango-wrap-up/SKILL.md)
+
+Finalizes the feature. It removes temporary dashboard files, verifies tests and final validation, checks UAT status, classifies the PR as feat, bugfix, or chore, prepares the commit, and creates the PR.
+
+The PR should make clear what changed, why it changed, which UATs passed or remain pending, which commands validated the work, and whether temporary files were cleaned up.
+
+## References and Credits
+
+Candango combines original ideas with skills and patterns I used as a base:
+
+- [`mattpocock/skills`](https://github.com/mattpocock/skills): the main reference for small composable skills, disciplined TDD, strong questions before implementation, local domain docs, and vertical issues.
+- [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), by Matt Pocock: the base for stress-testing requirements against docs, ADRs, and domain language.
+- [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd), by Matt Pocock: the base for the behavior-oriented RED/GREEN/REFACTOR cycle.
+- [`huashu-design`](https://github.com/alchaincyf/huashu-design), by alchaincyf: the base for the HTML design skill, prototypes, screens, visual demos, and interface artifacts.
+- `caveman`: adapted from a local ultra-compressed communication skill, inspired by the short-report style used in the skills ecosystem.
+
+The rest of the Candango skills connect these pieces into a full cycle: repo setup, clarification, optional design, plan, spec, issues, UAT, autonomous execution, independent validation, guided UAT, and wrap-up.
