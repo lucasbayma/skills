@@ -89,7 +89,7 @@ Default local prototype path:
 `docs/features/<feature-slug>/design/`
 
 Rules:
-- Use `$candango-design` for UI screens, layouts, flows, prototypes, and design review.
+- Use `$candango-design` to find the repo design system and coordinate UI screens, layouts, flows, prototypes, and design review.
 - Link design artifacts from plan, spec, issues, and UAT.
 - If user skips design work, record `Design artifacts skipped by user`.
 - Keep local design HTML and assets inside `docs/features/<feature-slug>/design/`.
@@ -113,7 +113,7 @@ Roles:
 - Feature wrap-up: removes runtime dashboard files and creates PR with UAT/validation status.
 - Caveman skill: compresses all user-facing communication and reports.
 - Grill-with-docs skill: clarifies feature decisions and updates domain docs before execution.
-- Huashu-design skill: creates or reviews UI screens/prototypes when interface scope exists.
+- Candango-design skill: finds design-system context and coordinates UI work when interface scope exists.
 - TDD skill: red-green-refactor execution for one issue at a time.
 
 Communication:
