@@ -10,7 +10,7 @@ Inspired by `mattpocock/skills`: small composable skills, repo-local config in `
 
 1. Run `$candango-setup` in the target repo.
 2. Clarify ambiguous scope with `$candango-discover`.
-3. If UI scope exists, create/edit screens with `$candango-design`.
+3. If UI scope exists, coordinate design work with `$candango-design`.
 4. Plan the feature with `$candango-plan`.
 5. Write the technical spec with `$candango-spec`.
 6. Create tracker issues with `$candango-issues`.
@@ -135,7 +135,7 @@ UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, exi
 If yes:
 
 ```text
-Use $candango-design to create UI screens/prototype for this feature in docs/features/<feature-slug>/design/.
+Use $candango-design to locate the design system and coordinate UI work for this feature in docs/features/<feature-slug>/design/.
 ```
 
 Then link design artifacts from:
@@ -235,7 +235,7 @@ Use $candango-wrap-up to clean temporary dashboard files and create a PR for doc
 UI only:
 
 ```text
-Use $candango-design to create/edit screens for docs/features/<feature-slug>/.
+Use $candango-design to locate the design system and coordinate UI work for docs/features/<feature-slug>/.
 Target surface: <Figma | local HTML prototype | existing codebase | screenshots>.
 ```
 
@@ -280,7 +280,7 @@ Default contents:
 - [`candango-setup`](./skills/candango/candango-setup/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
 - [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): mandatory terse user-facing communication and reports.
 - [`candango-discover`](./skills/candango/candango-discover/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
-- [`candango-design`](./skills/candango/candango-design/SKILL.md): create/review UI screens, layouts, and prototypes when feature scope includes an interface.
+- [`candango-design`](./skills/candango/candango-design/SKILL.md): reuse repo design systems and place UI work correctly when feature scope includes an interface.
 - [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): implement one issue at a time with red-green-refactor.
 - [`candango-plan`](./skills/candango/candango-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
 - [`candango-spec`](./skills/candango/candango-spec/SKILL.md): create technical spec from plan/context.
@@ -297,7 +297,7 @@ Forked/adapted skills:
 - [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): forked/adapted from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, with inspiration from Matt Pocock's concise communication workflow.
 - [`candango-discover`](./skills/candango/candango-discover/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
 - [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
-- [`candango-design`](./skills/candango/candango-design/SKILL.md): forked/adapted from local `huashu-design` at `/Users/bayma/.agents/skills/huashu-design/SKILL.md`, based on [`alchaincyf/huashu-design`](https://github.com/alchaincyf/huashu-design).
+- [`candango-design`](./skills/candango/candango-design/SKILL.md): coordinates Candango UI design-system discovery and delegates execution to existing UI/design skills.
 
 Architecture reference:
 
