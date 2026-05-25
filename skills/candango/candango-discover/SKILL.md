@@ -9,7 +9,7 @@ Interview user until plan is precise enough for spec, issues, UATs, and autonomo
 
 Ask one question at a time. For each question, provide recommended answer. 
 
-Before asking the question, check if code/docs can answer. If so, inspect repo instead of asking.
+Before asking the question, check if code/docs can answer. If so, inspect repo instead of asking and then confirm.
 
 Use `$candango-caveman` style for every user-facing question, summary, and report.
 
@@ -28,37 +28,40 @@ Read relevant:
 
 Create docs lazily. Write the grill session glossary and resolved context to `docs/features/<feature-slug>/context.md`. Use root `CONTEXT.md` only as input/reference unless the user explicitly asks to update global domain docs. Do not create ADR until a real decision is resolved.
 
-## Question Path
+## During the session
 
-Walk decision tree in dependency order:
+### Challenge against the glossary
 
-1. Business outcome
-2. Actors and permissions
-3. Domain terms
-4. Happy path
-5. Edge/error paths
-6. Data/API contracts
-7. UX/product behavior
-8. Interface scope and design artifact decision
-9. Rollout/migration
-10. UAT acceptance
-11. Issue slicing
-12. Final validation command
-13. Autonomous execution readiness
+When the user uses a term that conflicts with the existing language in `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
 
-Stop when next artifact can be produced without hidden context.
+### Sharpen fuzzy language
 
-## Domain Rules
+When the user uses vague or overloaded terms, propose a precise canonical term. "You're saying 'account' — do you mean the Customer or the User? Those are different things."
 
-Challenge glossary conflicts immediately:
+### Discuss concrete scenarios
 
-`CONTEXT says "Customer" means org, but plan uses customer as person. Which?`
+When domain relationships are being discussed, stress-test them with specific scenarios. Invent scenarios that probe edge cases and force the user to be precise about the boundaries between concepts.
 
-Sharpen fuzzy language:
+### Cross-reference with code
 
-`"Account" overloaded. Do you mean User, Organization, or Billing Account? Recommended: Billing Account.`
+When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-Cross-check code when user claims current behavior. Surface contradictions.
+### Update CONTEXT.md inline
+
+When a term is resolved, update update `docs/features/<feature-slug>/context.md` inline using `references/CONTEXT-FORMAT.md`. Don't batch these up — capture them as they happen.
+
+`CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+
+### Offer ADRs sparingly
+
+Only offer to create an ADR when all three are true:
+
+1. **Hard to reverse** — the cost of changing your mind later is meaningful
+2. **Surprising without context** — a future reader will wonder "why did they do it this way?"
+3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
+
+If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
+
 
 ## Documentation Updates
 
