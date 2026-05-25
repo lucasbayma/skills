@@ -2,17 +2,17 @@
 
 [![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
 
-Candango é um conjunto de skills para levar uma feature do setup do repo até UAT, com planejamento, especificação, issues verticais, execução autônoma, TDD, validação externa e wrap-up.
+Candango is a set of skills for taking a feature from repo setup to UAT, with planning, specification, vertical issues, autonomous execution, TDD, external validation, and wrap-up.
 
 ## Usage
 
-Instale pelo `skills.sh`:
+Install with `skills.sh`:
 
 ```bash
 npx skills@latest add lucasbayma/skills
 ```
 
-Selecione o conjunto recomendado:
+Select the recommended set:
 
 - `candango-setup`
 - `candango-caveman`
@@ -27,13 +27,13 @@ Selecione o conjunto recomendado:
 - `candango-uat-runner`
 - `candango-wrap-up`
 
-Em cada repo alvo, rode o setup uma vez:
+Run setup once in each target repo:
 
 ```text
 Use $candango-setup to configure this repo for autonomous feature delivery.
 ```
 
-Depois use o fluxo completo quando quiser entregar uma feature de ponta a ponta:
+Use the full flow when you want to deliver a feature end to end:
 
 ```text
 Use $candango-discover to clarify this feature:
@@ -45,7 +45,7 @@ $candango-executor, $candango-uat-runner, and $candango-wrap-up.
 All communication and reports must use $candango-caveman.
 ```
 
-Para uma feature pequena e já clara:
+For a small feature that is already clear:
 
 ```text
 Use $candango-plan to plan this small feature:
@@ -56,107 +56,107 @@ Then use $candango-spec, $candango-issues, $candango-uat, and
 $candango-executor.
 ```
 
-Se houver tela, fluxo, dashboard, app, formulário ou qualquer superfície visual, rode `candango-design` antes de fechar plano, spec e issues:
+If the feature includes screens, flows, dashboards, apps, forms, or any visual surface, run `candango-design` before finalizing the plan, spec, and issues:
 
 ```text
 Use $candango-design to create/edit screens for this feature.
 Target surface: local HTML prototype.
 ```
 
-## Loop completo
+## Full Loop
 
-### Ciclo de desenvolvimento
+### Development Cycle
 
-![Ciclo completo de desenvolvimento Candango](./docs/calango-development-cycle.svg)
+![Full Candango development cycle](./docs/calango-development-cycle.svg)
 
-### Ciclo do executor
+### Executor Cycle
 
-![Loop do executor com TDD e validação externa](./docs/executor-cycle.svg)
+![Executor loop with TDD and external validation](./docs/executor-cycle.svg)
 
-O ponto importante: o executor que implementa não valida o próprio trabalho. Ele escreve código com TDD; outro subagent, sem o contexto da conversa do executor e sem permissão para editar, revisa o diff contra spec, issue e UAT. Se falhar, a main agent transforma o parecer em nova rodada de TDD. Só depois entram UAT manual e validação final do repo.
+The key point: the executor that implements the work does not validate its own work. It writes code with TDD; another subagent, without the executor's conversation context and without permission to edit, reviews the diff against the spec, issue, and UAT. If validation fails, the main agent turns the report into another TDD round. Manual UAT and final repo validation happen only after that.
 
 ## Skills
 
 ### [`candango-setup`](./skills/candango/candango-setup/SKILL.md)
 
-Configura o repo para o fluxo Candango. Descobre ou pergunta qual tracker usar, onde ficam docs de feature, qual comando valida o trabalho, onde salvar dashboard, como tratar artefatos de design e quais regras os agentes devem seguir.
+Configures the repo for the Candango flow. It discovers or asks which tracker to use, where feature docs live, which command validates the work, where to save the dashboard, how to handle design artifacts, and which rules agents must follow.
 
-Ele cria documentação local para que as outras skills não dependam de memória da conversa. Rode uma vez por repo, e rode de novo só quando mudar tracker, convenção de docs ou processo de validação.
+It creates local documentation so the other skills do not depend on conversation memory. Run it once per repo, and run it again only when changing tracker, docs convention, or validation process.
 
 ### [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md)
 
-Define o estilo de comunicação do fluxo: curto, direto, sem enchimento, mas mantendo substância técnica. O objetivo é reduzir ruído em planos, specs, issues, relatórios de executor, pareceres de validator, histórico de dashboard, UAT e PR.
+Defines the flow's communication style: short, direct, no filler, while preserving technical substance. The goal is to reduce noise in plans, specs, issues, executor reports, validator reports, dashboard history, UAT, and PRs.
 
-Use quando quiser que todo o ciclo produza respostas e relatórios de alto sinal.
+Use it when you want the whole cycle to produce high-signal responses and reports.
 
 ### [`candango-discover`](./skills/candango/candango-discover/SKILL.md)
 
-Clareia uma feature antes de planejar. Ele lê docs, ADRs, contexto de domínio, configs do repo e código relevante antes de perguntar. Quando pergunta, faz uma pergunta por vez, com uma recomendação.
+Clarifies a feature before planning. It reads docs, ADRs, domain context, repo configs, and relevant code before asking questions. When it asks, it asks one question at a time, with a recommended answer.
 
-Serve para resolver termos ambíguos, regras de negócio, atores, permissões, paths felizes, erros, contratos, UX, rollout, UAT, slicing, validação final e prontidão para execução autônoma. O resultado é contexto de feature suficiente para plano, spec, issues e UAT.
+Use it to resolve ambiguous terms, business rules, actors, permissions, happy paths, errors, contracts, UX, rollout, UAT, slicing, final validation, and autonomous-execution readiness. The result is enough feature context for the plan, spec, issues, and UAT.
 
 ### [`candango-design`](./skills/candango/candango-design/SKILL.md)
 
-Entra quando a feature tem interface: tela web, app, dashboard, admin, onboarding, checkout, settings, formulário, tabela, fluxo ou mudança visual. Ele produz ou revisa artefatos de design antes de fechar plano e spec.
+Runs when the feature has an interface: web screen, app, dashboard, admin panel, onboarding, checkout, settings, form, table, flow, or visual change. It produces or reviews design artifacts before the plan and spec are finalized.
 
-O caminho recomendado é protótipo HTML local primeiro, depois portar para a base real. Os artefatos gerados viram referência para plano, spec, issues e UAT visual.
+The recommended path is a local HTML prototype first, then porting into the real codebase. Generated artifacts become references for the plan, spec, issues, and visual UAT.
 
 ### [`candango-plan`](./skills/candango/candango-plan/SKILL.md)
 
-Transforma pedido, contexto e decisões em um plano implementável. Ele registra problema, usuários, resultado esperado, não-objetivos, restrições, riscos, decisões e slices verticais.
+Turns the request, context, and decisions into an implementation-ready plan. It records the problem, users, expected outcome, non-goals, constraints, risks, decisions, and vertical slices.
 
-A skill diferencia feature pequena, média e grande. Para cada slice, define resultado, dependências, sinais de aceitação, risco e se pode rodar AFK ou precisa de HITL.
+The skill classifies a feature as small, medium, or large. For each slice, it defines outcome, dependencies, acceptance signals, risk, and whether it can run AFK or needs HITL.
 
 ### [`candango-spec`](./skills/candango/candango-spec/SKILL.md)
 
-Transforma o plano aprovado em especificação técnica. Ela descreve arquitetura, contratos, dados, permissões, erros, observabilidade, estratégia de testes, validação e rollout.
+Turns the approved plan into a technical specification. It describes architecture, contracts, data, permissions, errors, observability, test strategy, validation, and rollout.
 
-A spec deve permitir que outro agente implemente sem contexto escondido, que o validator revise sem inventar requisito, e que as issues sejam criadas sem virar lista horizontal de camadas.
+The spec should let another agent implement without hidden context, let the validator review without inventing requirements, and let issues be created without becoming a horizontal list of layers.
 
 ### [`candango-issues`](./skills/candango/candango-issues/SKILL.md)
 
-Quebra plano e spec em issues verticais e executáveis. Cada issue precisa ser pequena o bastante para validar sozinha, mas completa o bastante para entregar comportamento observável.
+Breaks the plan and spec into vertical, executable issues. Each issue should be small enough to validate independently, but complete enough to deliver observable behavior.
 
-Ela modela dependências, `blocked_by`, `unblocks`, parent, critérios de aceitação, tipo AFK/HITL, expectativas de validação e links para UAT/design quando existirem. Antes de escrever ou publicar issues, mostra a proposta e espera aprovação.
+It models dependencies, `blocked_by`, `unblocks`, parent, acceptance criteria, AFK/HITL type, validation expectations, and links to UAT/design when they exist. Before writing or publishing issues, it shows the proposed breakdown and waits for approval.
 
 ### [`candango-uat`](./skills/candango/candango-uat/SKILL.md)
 
-Gera cenários de aceite a partir das regras de negócio, plano, spec, issues e artefatos de design. O foco é comportamento externo, não detalhe interno.
+Generates acceptance scenarios from business rules, the plan, spec, issues, and design artifacts. The focus is external behavior, not internal detail.
 
-Os UATs usam Given/When/Then, têm prioridade, indicam se são automáticos, manuais ou ambos, e apontam quais acceptance criteria provam. Durante execução, o validator usa esses UATs como oráculo de negócio.
+UATs use Given/When/Then, have priority, indicate whether they are automated, manual, or both, and point to which acceptance criteria they prove. During execution, the validator uses these UATs as the business oracle.
 
 ### [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md)
 
-É a skill usada pelo executor para implementar uma issue por vez. O ciclo é RED, GREEN, REFACTOR: um teste de comportamento falha, a menor implementação passa, a limpeza acontece só enquanto tudo está verde.
+The skill the executor uses to implement one issue at a time. The cycle is RED, GREEN, REFACTOR: one behavior test fails, the smallest implementation passes, and cleanup happens only while everything is green.
 
-Os testes devem passar por interfaces públicas, resistir a refactors e verificar comportamento real. A saída do executor sempre inclui issue, comportamento implementado, testes, arquivos alterados, comandos e riscos.
+Tests should go through public interfaces, survive refactors, and verify real behavior. The executor output always includes the issue, implemented behavior, tests, changed files, commands, and risks.
 
 ### [`candango-executor`](./skills/candango/candango-executor/SKILL.md)
 
-Orquestra a execução autônoma. A main agent escolhe issues desbloqueadas, atualiza dashboard, dispara um executor com `candango-tdd`, dispara um validator independente, decide se volta para correção, UAT ou done, e roda a validação final.
+Orchestrates autonomous execution. The main agent picks unblocked issues, updates the dashboard, starts an executor with `candango-tdd`, starts an independent validator, decides whether to return to fixes, UAT, or done, and runs final validation.
 
-O executor pode editar código. O validator não edita; ele recebe diff, spec, issue e UAT, mas não recebe a conversa do executor. Isso força validação externa em vez de autoaprovação.
+The executor may edit code. The validator does not edit; it receives the diff, spec, issue, and UAT, but not the executor conversation. This forces external validation instead of self-approval.
 
 ### [`candango-uat-runner`](./skills/candango/candango-uat-runner/SKILL.md)
 
-Roda UAT manual ou semiautomático depois da implementação. Ele guia um cenário por vez, executa checks automáticos quando possível, dá passos manuais claros para o usuário e registra passou, falhou ou bloqueou.
+Runs manual or semi-automated UAT after implementation. It guides one scenario at a time, runs automated checks when possible, gives clear manual steps to the user, and records passed, failed, or blocked status.
 
-Quando um UAT falha, ele captura repro, esperado, atual, evidências e contexto relacionado, depois manda esse pacote para o `candango-executor` reiniciar o loop de correção com TDD e validator.
+When a UAT fails, it captures repro steps, expected behavior, actual behavior, evidence, and related context, then sends that package to `candango-executor` to restart the fix loop with TDD and validation.
 
 ### [`candango-wrap-up`](./skills/candango/candango-wrap-up/SKILL.md)
 
-Finaliza a feature. Limpa arquivos temporários de dashboard, verifica testes e validação final, checa status de UAT, classifica o PR como feat, bugfix ou chore, prepara commit e cria PR.
+Finalizes the feature. It removes temporary dashboard files, verifies tests and final validation, checks UAT status, classifies the PR as feat, bugfix, or chore, prepares the commit, and creates the PR.
 
-O PR deve deixar claro o que mudou, por quê, quais UATs passaram ou ficaram pendentes, quais comandos validaram o trabalho e se houve limpeza de arquivos temporários.
+The PR should make clear what changed, why it changed, which UATs passed or remain pending, which commands validated the work, and whether temporary files were cleaned up.
 
-## Referências e créditos
+## References and Credits
 
-Candango combina ideias próprias com skills e padrões que usei como base:
+Candango combines original ideas with skills and patterns I used as a base:
 
-- [`mattpocock/skills`](https://github.com/mattpocock/skills): referência principal para skills pequenas e compostáveis, TDD disciplinado, perguntas fortes antes de implementar, docs locais de domínio e issues verticais.
-- [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), de Matt Pocock: base para o fluxo de stress-test de requisitos contra docs, ADRs e linguagem de domínio.
-- [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd), de Matt Pocock: base para o ciclo RED/GREEN/REFACTOR orientado por comportamento.
-- [`huashu-design`](https://github.com/alchaincyf/huashu-design), de alchaincyf: base para a skill de design HTML, protótipos, telas, demos visuais e artefatos de interface.
-- `caveman`: adaptada de uma skill local de comunicação ultra-comprimida, inspirada no estilo de relatórios curtos usado no ecossistema de skills.
+- [`mattpocock/skills`](https://github.com/mattpocock/skills): the main reference for small composable skills, disciplined TDD, strong questions before implementation, local domain docs, and vertical issues.
+- [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs), by Matt Pocock: the base for stress-testing requirements against docs, ADRs, and domain language.
+- [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd), by Matt Pocock: the base for the behavior-oriented RED/GREEN/REFACTOR cycle.
+- [`huashu-design`](https://github.com/alchaincyf/huashu-design), by alchaincyf: the base for the HTML design skill, prototypes, screens, visual demos, and interface artifacts.
+- `caveman`: adapted from a local ultra-compressed communication skill, inspired by the short-report style used in the skills ecosystem.
 
-As demais skills do Candango conectam essas peças em um ciclo completo: setup do repo, clarificação, design opcional, plano, spec, issues, UAT, execução autônoma, validação independente, UAT guiado e wrap-up.
+The rest of the Candango skills connect these pieces into a full cycle: repo setup, clarification, optional design, plan, spec, issues, UAT, autonomous execution, independent validation, guided UAT, and wrap-up.
