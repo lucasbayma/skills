@@ -1,13 +1,15 @@
 ---
 name: candango-issues
-description: Candango Issues. Convert a feature plan or technical spec into implementation issues, stories, tasks, and subtasks. Use when the user wants issues saved to GitHub Issues, Linear, Jira, or local markdown, with dependencies, acceptance criteria, AFK/HITL classification, and autonomous-execution-ready issue bodies. Always writes a local Markdown issue index under docs/features using the feature slug, even when also publishing to GitHub, Linear, Jira, or another tracker. Part of Candango Skills by lucasbayma.
+description: Candango Issues. Thin Candango wrapper over Matt Pocock's to-issues skill. Convert a feature plan into implementation issues, stories, tasks, and subtasks. Use when the user wants issues saved to GitHub Issues, Linear, Jira, or local markdown, with dependencies, acceptance criteria, AFK/HITL classification, and autonomous-execution-ready issue bodies. Always writes a local Markdown issue index under docs/features using the feature slug, even when also publishing to GitHub, Linear, Jira, or another tracker.
 ---
 
 # Candango Issues
 
-Break spec into independently executable vertical slices and publish them to chosen tracker.
+Use `$to-issues` as the issue-slicing engine. Apply Candango tracker/path rules after slicing.
 
-All user-facing communication and written issue reports must use `$candango-caveman`.
+Break the feature plan into independently executable vertical slices and publish them to the chosen tracker.
+
+All user-facing communication and written issue reports must use `$caveman`.
 
 Hard rule: do not write `issues.md`, create tracker issues, or mutate any tracker until the user explicitly approves the proposed issue breakdown.
 
@@ -15,7 +17,7 @@ Hard rule: do not write `issues.md`, create tracker issues, or mutate any tracke
 
 Read:
 
-- feature plan/spec
+- feature plan
 - design artifacts from `candango-design` when interface scope exists
 - `docs/agents/feature-issue-tracker.md`
 - `docs/agents/feature-docs.md`

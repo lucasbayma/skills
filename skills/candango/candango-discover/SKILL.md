@@ -1,17 +1,21 @@
 ---
 name: candango-discover
-description: Candango Discover. Stress-test a feature plan against the repo's domain language, docs, ADRs, business rules, UAT needs, tracker shape, validation command, and autonomous execution readiness. Use when planning a feature, clarifying ambiguous requirements, preparing candango-plan or candango-spec, or when user wants relentless questions with feature-scoped documentation updates in docs/features using the feature slug. Fork credit to Matt Pocock grill-with-docs.
+description: Candango Discover. Thin Candango wrapper over Matt Pocock's grill-with-docs skill. Use when planning a feature, clarifying ambiguous requirements, preparing candango-plan, or when user wants relentless questions with feature-scoped documentation updates in docs/features using the feature slug.
 ---
 
 # Candango Discover
 
-Interview user until plan is precise enough for spec, issues, UATs, and autonomous execution.
+Use `$grill-with-docs` as the questioning engine. Pass Candango's feature context path as the docs output target:
+
+`docs/features/<feature-slug>/context.md`
+
+Interview user until plan is precise enough for issues, UATs, and autonomous execution.
 
 Ask one question at a time. For each question, provide recommended answer. 
 
 Before asking the question, check if code/docs can answer. If so, inspect repo instead of asking.
 
-Use `$candango-caveman` style for every user-facing question, summary, and report.
+Use `$caveman` style for every user-facing question, summary, and report.
 
 ## Explore First
 
@@ -67,7 +71,7 @@ When term resolves, update `docs/features/<feature-slug>/context.md` inline usin
 `docs/features/<feature-slug>/context.md` is glossary and feature-context only:
 
 - no implementation notes
-- no specs
+- no implementation plans
 - no todo list
 - no decision log
 - no global domain changes unless copied from root `CONTEXT.md` as reference
@@ -86,7 +90,7 @@ Before ending, ensure answers exist for:
 
 - What user-visible behavior changes?
 - Does scope include interface work: web, app, dashboard, admin, flow, screen, layout, form, table, design system?
-- If interface scope exists, did user choose whether to create/edit layouts/screens and where: Figma, local HTML prototype, existing codebase, screenshots, or other?
+- If interface scope exists, did user choose whether to create/edit layouts/screens and where: existing codebase, Figma, screenshots, local design artifacts, or other?
 - What is out of scope?
 - Which UATs prove business success?
 - Which issue tracker should receive work?
@@ -97,9 +101,9 @@ Before ending, ensure answers exist for:
 
 If interface scope exists, ask exactly one caveman-style question before final summary:
 
-`UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.`
+`UI scope found. Create/edit layouts now? Where: existing codebase, Figma, screenshots, local design artifacts, other? Recommended: existing codebase for real UI; docs/features/<feature-slug>/design/ for artifacts.`
 
-If user agrees, use `$candango-design` before `candango-plan` or `candango-spec` is finalized.
+If user agrees, use `$candango-design` before `candango-plan` is finalized.
 
 If final validation command is unknown after repo/CI discovery, ask exactly:
 

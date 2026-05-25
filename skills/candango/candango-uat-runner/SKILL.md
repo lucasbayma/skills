@@ -7,14 +7,14 @@ description: Candango UAT Runner. Runs existing feature UATs interactively again
 
 Run UATs from `docs/features/<feature-slug>/uat.md` one scenario at a time.
 
-All user-facing communication and written UAT reports must use `$candango-caveman`.
+All user-facing communication and written UAT reports must use `$caveman`.
 
 ## Inputs
 
 Read:
 
 - `docs/features/<feature-slug>/uat.md`
-- `plan.md`, `technical-spec.md`, `issues.md`, and dashboard state when present
+- `plan.md`, `issues.md`, and dashboard state when present
 - repo setup docs under `docs/agents/`
 - stack files such as `package.json`, lockfiles, Docker files, app config, routes, tests, and README
 - relevant code paths for each UAT scenario
@@ -72,10 +72,10 @@ If user says a UAT failed or describes a problem:
    - user repro steps and user notes
    - expected vs actual behavior
    - evidence: logs, screenshots, command output, URLs, data state
-   - related issue/spec/plan references
+   - related issue/plan references
    - suspected files/tests and validation commands
 4. Send the failure package to `$candango-executor`.
-5. `$candango-executor` restarts the fix loop with executor `$candango-tdd` and validator review.
+5. `$candango-executor` restarts the fix loop with executor `$tdd` and validator review.
 6. Re-run the failed UAT after executor/validator pass.
 7. Return to the UAT checklist only after validation passes.
 Never bypass `$candango-executor` for failed UAT fixes.
@@ -86,7 +86,7 @@ Pause and ask when:
 
 - UAT steps require unavailable credentials or third-party access
 - environment setup cannot be inferred
-- expected behavior conflicts with spec/issues
+- expected behavior conflicts with plan/issues
 - user reports behavior that cannot be reproduced after investigation
 
 ## Output

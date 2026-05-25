@@ -1,13 +1,17 @@
 ---
 name: candango-plan
-description: Candango Plan. Plan a feature before implementation, whether small or large. Use when the user wants to shape feature scope, clarify business rules, split uncertain work from ready work, identify dependencies, and produce a concise implementation-ready plan for later candango-spec, candango-issues, candango-uat, or candango-executor use. Part of Candango Skills by lucasbayma.
+description: Candango Plan. Thin Candango wrapper over Matt Pocock's to-prd skill. Use when the user wants to shape feature scope, clarify business rules, split uncertain work from ready work, identify dependencies, and produce a concise implementation-ready plan for later candango-issues, candango-uat, or candango-executor use.
 ---
 
 # Candango Plan
 
 Create an implementation-ready plan from conversation, repo context, and business definitions.
 
-All user-facing communication and written planning reports must use `$candango-caveman`.
+All user-facing communication and written planning reports must use `$caveman`.
+
+Use `$to-prd` as the planning engine. Save the Candango-shaped output as a feature plan, not a standalone PRD:
+
+`docs/features/<feature-slug>/plan.md`
 
 ## Inputs
 
@@ -87,7 +91,7 @@ Use `candango-discover` for one-question-at-a-time clarification when ambiguity 
 
 ## Output
 
-Write or return a plan using `references/candango-plan-template.md`.
+Write or return a plan using `references/feature-plan-template.md`.
 
 Prefer saving to configured docs path:
 

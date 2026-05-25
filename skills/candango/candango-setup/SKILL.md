@@ -1,6 +1,6 @@
 ---
 name: candango-setup
-description: Candango Setup. Configure a repo for autonomous feature delivery skills. Use before candango-plan, candango-spec, candango-issues, candango-uat, candango-uat-runner, candango-executor, or candango-wrap-up when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions. Part of Candango Skills by lucasbayma.
+description: Candango Setup. Configure a repo for autonomous feature delivery skills. Use before candango-plan, candango-issues, candango-uat, candango-uat-runner, candango-executor, or candango-wrap-up when the repo has not yet declared its issue tracker, feature folder layout, UAT location, validation command discovery rules, dashboard location, design artifact location, or agent execution conventions.
 ---
 
 # Candango Setup
@@ -37,11 +37,11 @@ Required decisions:
 - **Design artifact path/surface**: default ask per feature; local artifacts go under `docs/features/<feature-slug>/design/`; external options Figma, existing codebase, screenshots, other.
 - **Status model**: use `backlog`, `in-progress`, `validation`, `uat`, `done`.
 - **Subagent policy**: executor may edit; validator may not edit.
-- **Implementation style**: executor subagents use repo-local `$candango-tdd`.
+- **Implementation style**: executor subagents use Matt Pocock's `$tdd`.
 - **UAT run style**: `$candango-uat-runner` guides one UAT at a time and restarts TDD fix loops on failure.
 - **Wrap-up style**: `$candango-wrap-up` creates PRs with caveman descriptions and UAT status.
-- **Communication style**: use repo-local `$candango-caveman` for all user-facing communication and written reports.
-- **Clarification style**: use repo-local `$candango-discover` before planning/spec work when feature terms or business rules are ambiguous.
+- **Communication style**: use `$caveman` for all user-facing communication and written reports.
+- **Clarification style**: use repo-local `$candango-discover` before planning work when feature terms or business rules are ambiguous.
 
 ### 3. Write
 
@@ -88,7 +88,7 @@ See `docs/agents/autonomous-feature-execution.md`.
 
 ### Local support skills
 
-Use `$candango-caveman` for every user-facing message/report and `$candango-discover` for feature clarification against docs.
+Use `$caveman` for every user-facing message/report and `$candango-discover` for feature clarification against docs.
 ```
 
 Then create:

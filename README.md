@@ -2,9 +2,9 @@
 
 [![skills.sh](https://skills.sh/b/lucasbayma/skills)](https://skills.sh/lucasbayma/skills)
 
-Candango-branded skills for planning, specifying, slicing, validating, and executing features with agent subloops.
+Candango-branded skills for planning, slicing, validating, and executing features with agent subloops.
 
-Inspired by `mattpocock/skills`: small composable skills, repo-local config in `docs/agents/`, vertical slices, TDD, explicit issue tracker, and domain docs.
+Candango depends on selected skills from [`mattpocock/skills`](https://github.com/mattpocock/skills) instead of copying them. Candango adds repo-local paths, feature docs, UAT flow, dashboards, and autonomous execution conventions.
 
 ## Quickstart
 
@@ -12,16 +12,40 @@ Inspired by `mattpocock/skills`: small composable skills, repo-local config in `
 2. Clarify ambiguous scope with `$candango-discover`.
 3. If UI scope exists, coordinate design work with `$candango-design`.
 4. Plan the feature with `$candango-plan`.
-5. Write the technical spec with `$candango-spec`.
-6. Create tracker issues with `$candango-issues`.
-7. Generate UATs with `$candango-uat`.
-8. Execute approved issues with `$candango-executor`.
-9. Run guided UAT with `$candango-uat-runner`.
-10. Wrap up and create PR with `$candango-wrap-up`.
+5. Create tracker issues with `$candango-issues`.
+6. Generate UATs with `$candango-uat`.
+7. Execute approved issues with `$candango-executor`.
+8. Run guided UAT with `$candango-uat-runner`.
+9. Wrap up and create PR with `$candango-wrap-up`.
 
 ## Usage
 
-### Install With skills.sh
+### Install Matt Skills First
+
+Install the upstream skills that Candango wrappers call:
+
+```bash
+npx skills@latest add mattpocock/skills
+```
+
+Select these Matt skills:
+
+- `caveman`
+- `grill-with-docs`
+- `to-prd`
+- `to-issues`
+- `tdd`
+
+Candango uses them directly:
+
+| Candango skill | Matt skill |
+|---|---|
+| `candango-discover` | `grill-with-docs` |
+| `candango-plan` | `to-prd` |
+| `candango-issues` | `to-issues` |
+| `candango-executor` | `tdd` |
+
+### Install Candango With skills.sh
 
 Install from GitHub:
 
@@ -34,12 +58,9 @@ Then select the skills you want in the installer.
 Recommended install set:
 
 - `candango-setup`
-- `candango-caveman`
 - `candango-discover`
 - `candango-design`
-- `candango-tdd`
 - `candango-plan`
-- `candango-spec`
 - `candango-issues`
 - `candango-uat`
 - `candango-uat-runner`
@@ -58,12 +79,9 @@ Example local layout:
 skills/
 └── candango/
     ├── candango-setup/
-    ├── candango-caveman/
     ├── candango-discover/
     ├── candango-design/
-    ├── candango-tdd/
     ├── candango-plan/
-    ├── candango-spec/
     ├── candango-issues/
     ├── candango-uat/
     ├── candango-uat-runner/
@@ -93,14 +111,13 @@ Use when scope is clear and low risk:
 
 ```text
 Use $candango-plan to plan this small feature: <feature request>.
-Then use $candango-spec, $candango-issues, $candango-uat, and $candango-executor.
+Then use $candango-issues, $candango-uat, and $candango-executor.
 ```
 
 Expected output:
 
 - `docs/features/<feature-slug>/context.md`
 - `docs/features/<feature-slug>/plan.md`
-- `technical-spec.md`
 - `issues.md`
 - `uat.md`
 - `index.html`
@@ -118,7 +135,6 @@ Then:
 
 ```text
 Use $candango-plan to turn the resolved decisions into a feature plan.
-Use $candango-spec to write the technical spec.
 Use $candango-issues to create vertical-slice issues.
 Use $candango-uat to generate UATs.
 Use $candango-executor to execute approved issues.
@@ -129,7 +145,7 @@ Use $candango-executor to execute approved issues.
 If `candango-discover` finds web/app/dashboard/forms/screens/flows/design-system scope, it asks:
 
 ```text
-UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.
+UI scope found. Create/edit layouts now? Where: existing codebase, Figma, screenshots, local design artifacts, other? Recommended: existing codebase for real UI; docs/features/<feature-slug>/design/ for artifacts.
 ```
 
 If yes:
@@ -142,7 +158,6 @@ Then link design artifacts from:
 
 - `plan.md`
 - `context.md`
-- `technical-spec.md`
 - issues
 - `uat.md`
 
@@ -150,7 +165,7 @@ Then link design artifacts from:
 
 Skip `candango-design`.
 
-Record in plan/spec:
+Record in plan:
 
 ```text
 Design artifacts skipped: no interface scope.
@@ -158,7 +173,7 @@ Design artifacts skipped: no interface scope.
 
 ### Autonomous Execution
 
-Run after issues/UAT/spec are ready:
+Run after issues/UAT/plan are ready:
 
 ```text
 Use $candango-executor to execute the approved issues for docs/features/<feature-slug>/.
@@ -172,7 +187,7 @@ Executor creates/updates:
 Loop:
 
 1. Main agent discovers unblocked issues.
-2. Executor subagent implements with TDD.
+2. Executor subagent implements with Matt Pocock's `$tdd`.
 3. Validator subagent reviews without executor context.
 4. Main agent sends fixes back if needed.
 5. Main agent runs final validation command.
@@ -189,8 +204,8 @@ Use $candango-discover to clarify this feature:
 <feature request>
 
 If interface scope exists, ask whether to create/edit layouts and where.
-Then use $candango-plan, $candango-spec, $candango-issues, $candango-uat, $candango-executor, $candango-uat-runner, and $candango-wrap-up.
-All communication and reports must use $candango-caveman.
+Then use $candango-plan, $candango-issues, $candango-uat, $candango-executor, $candango-uat-runner, and $candango-wrap-up.
+All communication and reports must use $caveman.
 ```
 
 Plan only:
@@ -201,23 +216,17 @@ Use $candango-plan to create docs/features/<feature-slug>/plan.md for:
 <feature request>
 ```
 
-Spec only:
-
-```text
-Use $candango-spec to create technical-spec.md from docs/features/<feature-slug>/plan.md.
-```
-
 Issues only:
 
 ```text
-Use $candango-issues to create vertical-slice issues from docs/features/<feature-slug>/technical-spec.md.
+Use $candango-issues to create vertical-slice issues from docs/features/<feature-slug>/plan.md.
 Target tracker: <GitHub | Linear | Jira | local markdown>.
 ```
 
 UAT only:
 
 ```text
-Use $candango-uat to generate UATs from plan/spec/issues in docs/features/<feature-slug>/.
+Use $candango-uat to generate UATs from plan/issues/context in docs/features/<feature-slug>/.
 ```
 
 Run UAT:
@@ -236,18 +245,17 @@ UI only:
 
 ```text
 Use $candango-design to locate the design system and coordinate UI work for docs/features/<feature-slug>/.
-Target surface: <Figma | local HTML prototype | existing codebase | screenshots>.
+Target surface: <existing codebase | Figma | screenshots | local design artifacts>.
 ```
 
 ## Communication Contract
 
-All user-facing communication and written reports must use repo-local `$candango-caveman`.
+All user-facing communication and written reports must use `$caveman`.
 
 This includes:
 
 - planning summaries
 - clarification questions
-- technical spec summaries
 - issue breakdown reports
 - UAT reports
 - UAT run confirmations
@@ -266,7 +274,6 @@ All candango-specific docs and HTML live together:
 Default contents:
 
 - `plan.md`
-- `technical-spec.md`
 - `uat.md`
 - `issues.md`
 - `index.html` execution dashboard
@@ -278,12 +285,9 @@ Default contents:
 ## Skills
 
 - [`candango-setup`](./skills/candango/candango-setup/SKILL.md): configure issue tracker, feature folder layout, validation command, dashboard path, and subagent rules.
-- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): mandatory terse user-facing communication and reports.
 - [`candango-discover`](./skills/candango/candango-discover/SKILL.md): stress-test feature plans against domain docs and write feature-scoped `context.md`.
 - [`candango-design`](./skills/candango/candango-design/SKILL.md): reuse repo design systems and place UI work correctly when feature scope includes an interface.
-- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): implement one issue at a time with red-green-refactor.
 - [`candango-plan`](./skills/candango/candango-plan/SKILL.md): shape feature scope, decisions, risks, and delivery slices.
-- [`candango-spec`](./skills/candango/candango-spec/SKILL.md): create technical spec from plan/context.
 - [`candango-issues`](./skills/candango/candango-issues/SKILL.md): write `issues.md` and publish vertical-slice issues to GitHub, Linear, Jira, or local markdown.
 - [`candango-uat`](./skills/candango/candango-uat/SKILL.md): generate business-facing UAT scenarios.
 - [`candango-executor`](./skills/candango/candango-executor/SKILL.md): orchestrate TDD executor and read-only validator subagents with HTML dashboard.
@@ -292,16 +296,17 @@ Default contents:
 
 ## Credits
 
-Forked/adapted skills:
+Candango wrapper dependencies:
 
-- [`candango-caveman`](./skills/candango/candango-caveman/SKILL.md): forked/adapted from local skill at `/Users/bayma/.agents/skills/caveman/SKILL.md`, with inspiration from Matt Pocock's concise communication workflow.
-- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): forked/adapted from Matt Pocock's [`grill-with-docs`](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs).
-- [`candango-tdd`](./skills/candango/candango-tdd/SKILL.md): forked/adapted from Matt Pocock's [`tdd`](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd).
+- [`candango-discover`](./skills/candango/candango-discover/SKILL.md): calls Matt Pocock's `grill-with-docs`.
+- [`candango-plan`](./skills/candango/candango-plan/SKILL.md): calls Matt Pocock's `to-prd`.
+- [`candango-issues`](./skills/candango/candango-issues/SKILL.md): calls Matt Pocock's `to-issues`.
+- [`candango-executor`](./skills/candango/candango-executor/SKILL.md): delegates implementation to Matt Pocock's `tdd`.
 - [`candango-design`](./skills/candango/candango-design/SKILL.md): coordinates Candango UI design-system discovery and delegates execution to existing UI/design skills.
 
 Architecture reference:
 
-- [`mattpocock/skills`](https://github.com/mattpocock/skills): composable skills, repo-local `docs/agents/` config, issue tracker setup, domain docs, vertical slices.
+- [`mattpocock/skills`](https://github.com/mattpocock/skills): composable skills, domain docs, vertical slices, TDD, and concise workflow patterns.
 
 ## Execution Model
 
@@ -317,13 +322,13 @@ Main agent:
 
 Executor subagent:
 
-- uses TDD
+- uses Matt Pocock's `$tdd`
 - edits code
 - reports changed files, tests, risks
 
 Validator subagent:
 
-- receives issue/spec/UAT and diff
+- receives issue/plan/UAT and diff
 - receives no executor chat context
 - does not edit code
 - returns pass/fix report

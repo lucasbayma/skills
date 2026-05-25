@@ -1,21 +1,20 @@
 ---
 name: candango-uat
-description: Candango UAT. Generate user acceptance tests from business definitions, feature plans, technical specs, and issue acceptance criteria. Use when the user wants UAT scenarios before implementation, during validation, or before marking autonomous feature work done. Part of Candango Skills by lucasbayma.
+description: Candango UAT. Generate user acceptance tests from business definitions, feature plans, feature context, and issue acceptance criteria. Use when the user wants UAT scenarios before implementation, during validation, or before marking autonomous feature work done.
 ---
 
 # Candango UAT
 
 Create UATs that prove business behavior, not internal implementation.
 
-All user-facing communication and written UAT reports must use `$candango-caveman`.
+All user-facing communication and written UAT reports must use `$caveman`.
 
 ## Inputs
 
 Read:
 
-- business definitions from conversation/spec
+- business definitions from conversation/context
 - feature plan
-- technical spec
 - issue acceptance criteria
 - design artifacts from `candango-design` when interface scope exists
 - `docs/features/<feature-slug>/context.md`
