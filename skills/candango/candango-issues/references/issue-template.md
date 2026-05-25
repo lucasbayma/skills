@@ -2,7 +2,7 @@
 
 ## Parent
 
-<parent issue/spec/doc link>
+<parent issue/plan/doc link>
 
 ## Feature Folder
 
@@ -34,7 +34,7 @@ backlog
 
 ## Design Links
 
-- <Figma/local HTML/screenshot/code link or None>
+- <Figma/local design artifact/screenshot/code link or None>
 
 ## Technical Constraints
 

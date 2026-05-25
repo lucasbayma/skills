@@ -1,6 +1,6 @@
 ---
 name: candango-executor
-description: Candango Executor. Execute approved feature issues autonomously through a main-agent orchestration loop. Use when the user wants the agent to identify executable issues, generate an HTML dashboard with dependency tree, Kanban status, and execution history, delegate each issue to a TDD executor subagent, delegate validation to an independent read-only validator subagent, loop until validation passes, run final repo validation, and communicate all user-facing updates and reports using candango-caveman style. Part of Candango Skills by lucasbayma.
+description: Candango Executor. Execute approved feature issues autonomously through a main-agent orchestration loop. Use when the user wants the agent to identify executable issues, generate an HTML dashboard with dependency tree, Kanban status, and execution history, delegate each issue to a TDD executor subagent, delegate validation to an independent read-only validator subagent, loop until validation passes, run final repo validation, and communicate all user-facing updates and reports using caveman style.
 ---
 
 # Candango Executor
@@ -10,14 +10,14 @@ Main agent orchestrates. Executor subagent edits. Validator subagent reviews onl
 ## Hard Rules
 
 - Main agent does not implement feature code.
-- Executor subagent uses repo-local `$candango-tdd` and may edit files.
-- Validator subagent receives code diff plus issue/spec/UAT context, not executor chat history.
+- Executor subagent uses Matt Pocock's `$tdd` and may edit files.
+- Validator subagent receives code diff plus issue/plan/UAT context, not executor chat history.
 - Validator subagent must not fix code.
 - If validator reports required fixes, main agent sends report back to executor.
 - Main agent polls/health-checks active subagents every 1 minute when tool support allows.
 - Main agent updates dashboard after every status change and major event.
-- Every user-facing message, dashboard entry, and written report uses `$candango-caveman` style: terse, high-signal, no fluff.
-- If issue/spec/UAT conflict or terms are ambiguous, pause execution and use `$candango-discover`.
+- Every user-facing message, dashboard entry, and written report uses `$caveman` style: terse, high-signal, no fluff.
+- If issue/plan/UAT conflict or terms are ambiguous, pause execution and use `$candango-discover`.
 
 ## Setup
 
@@ -27,7 +27,7 @@ Read:
 - `docs/agents/feature-issue-tracker.md`
 - `docs/agents/feature-validation.md`
 - `docs/agents/feature-docs.md`
-- feature plan/spec/UAT docs
+- feature plan/UAT docs
 - executable issues from tracker
 
 If final validation command is missing, discover from CI first. If still unknown, ask:
@@ -53,7 +53,7 @@ Create:
 
 - JSON state: `docs/features/<feature-slug>/state.json`
 - HTML page: `docs/features/<feature-slug>/index.html`
-- Use same feature folder as `plan.md`, `technical-spec.md`, `uat.md`, `issues.md`, and `design/`.
+- Use same feature folder as `plan.md`, `uat.md`, `issues.md`, and `design/`.
 
 Dashboard must show:
 
@@ -94,7 +94,7 @@ After all selected issues are `done`:
 Pause and ask user when:
 
 - dependency cycle exists
-- issue requirements conflict with spec/UAT
+- issue requirements conflict with plan/UAT
 - validator and executor loop fails twice on same issue with same finding
 - final validation requires credentials/env unavailable to agent
 - manual UAT needed

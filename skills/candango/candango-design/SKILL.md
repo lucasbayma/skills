@@ -7,7 +7,7 @@ description: Candango Design. Use for UI, layout, screen, flow, design artifact,
 
 Start from repo. Reuse design system. No blank-canvas UI.
 
-Use repo-local `$candango-caveman` for user-facing text when configured.
+Use `$caveman` for user-facing text when configured.
 
 ## Workflow
 

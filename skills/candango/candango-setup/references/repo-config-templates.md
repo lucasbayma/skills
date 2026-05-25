@@ -21,8 +21,8 @@ Autonomous issue rules:
 - AFK issues may be executed by subagents.
 - HITL issues require user approval before implementation.
 - Dependencies must be explicit in issue body.
-- Repo-local `$candango-caveman` is mandatory for all user-facing communication and written reports.
-- Repo-local `$candango-discover` resolves ambiguous feature terms/rules before planning/spec work.
+- `$caveman` is mandatory for all user-facing communication and written reports.
+- Repo-local `$candango-discover` resolves ambiguous feature terms/rules before planning work.
 ```
 
 ## docs/agents/feature-docs.md
@@ -37,7 +37,6 @@ Default feature docs path:
 Files:
 - `context.md` output from `$candango-discover`
 - `plan.md`
-- `technical-spec.md`
 - `uat.md`
 - `issues.md` always, even when issues are also published to GitHub, Linear, Jira, or another tracker
 - `index.html` execution dashboard, removed by `$candango-wrap-up` before PR when not needed
@@ -75,22 +74,22 @@ Feature is complete only when selected issues are done and final command passes,
 
 When business definition includes interface scope, ask:
 
-`UI scope found. Create/edit layouts now? Where: Figma, local HTML prototype, existing codebase, screenshots, other? Recommended: local HTML prototype first, then port.`
+`UI scope found. Create/edit layouts now? Where: existing codebase, Figma, screenshots, local design artifacts, other? Recommended: existing codebase for real UI; docs/features/<feature-slug>/design/ for artifacts.`
 
 Design surfaces:
-- Figma
-- local HTML prototype
 - existing codebase
+- Figma
 - screenshots
+- local design artifacts
 - other
 
-Default local prototype path:
+Default local design artifact path:
 
 `docs/features/<feature-slug>/design/`
 
 Rules:
-- Use `$candango-design` to find the repo design system and coordinate UI screens, layouts, flows, prototypes, and design review.
-- Link design artifacts from plan, spec, issues, and UAT.
+- Use `$candango-design` to find the repo design system and coordinate UI screens, layouts, flows, and design review.
+- Link design artifacts from plan, issues, and UAT.
 - If user skips design work, record `Design artifacts skipped by user`.
 - Keep local design HTML and assets inside `docs/features/<feature-slug>/design/`.
 ```
@@ -107,8 +106,8 @@ Dashboard:
 
 Roles:
 - Main agent: orchestrates, updates dashboard, runs final validation.
-- Executor subagent: implements issue with repo-local `$candango-tdd`, may edit files.
-- Validator subagent: validates diff against issue/spec/UAT, must not edit files.
+- Executor subagent: implements issue with Matt Pocock's `$tdd`, may edit files.
+- Validator subagent: validates diff against issue/plan/UAT, must not edit files.
 - UAT runner: guides user through manual UATs, marks checked scenarios, and restarts TDD fix loops on failure.
 - Feature wrap-up: removes runtime dashboard files and creates PR with UAT/validation status.
 - Caveman skill: compresses all user-facing communication and reports.
@@ -117,7 +116,7 @@ Roles:
 - TDD skill: red-green-refactor execution for one issue at a time.
 
 Communication:
-- All user-facing messages and reports must use `$candango-caveman`.
+- All user-facing messages and reports must use `$caveman`.
 
 Polling:
 - Health-check active subagents every 1 minute when tooling supports it.

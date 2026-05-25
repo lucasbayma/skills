@@ -2,12 +2,12 @@
 
 Validate one issue. Do not edit files.
 
-Use repo-local `$candango-caveman` for every user-facing message and final report.
+Use `$caveman` for every user-facing message and final report.
 
 Inputs:
 
 - issue body
-- feature plan/spec/UAT
+- feature plan/UAT
 - code diff or changed files
 - project standards/docs
 
