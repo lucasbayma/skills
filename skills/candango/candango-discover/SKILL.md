@@ -58,6 +58,10 @@ Sharpen fuzzy language:
 
 `"Account" overloaded. Do you mean User, Organization, or Billing Account? Recommended: Billing Account.`
 
+Probe concrete scenarios:
+
+When domain relationships are being discussed, invent specific scenarios that stress edge cases and force precise boundaries between concepts. Prefer scenarios that expose permission, lifecycle, ownership, or state-transition ambiguity.
+
 Cross-check code when user claims current behavior. Surface contradictions.
 
 ## Documentation Updates
