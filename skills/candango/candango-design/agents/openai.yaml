@@ -1,4 +1,4 @@
 interface:
   display_name: "Candango Design"
-  short_description: "High-fidelity UI screens and prototypes"
-  default_prompt: "Use $candango-design to create or review UI screens/prototypes for this feature."
+  short_description: "Reuse repo design systems for UI work"
+  default_prompt: "Use $candango-design to find repo design system and place UI work."

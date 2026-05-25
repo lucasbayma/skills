@@ -59,7 +59,7 @@ $candango-executor.
 If the feature includes screens, flows, dashboards, apps, forms, or any visual surface, run `candango-design` before finalizing the plan, spec, and issues:
 
 ```text
-Use $candango-design to create/edit screens for this feature.
+Use $candango-design to locate the design system and coordinate UI work for this feature.
 Target surface: local HTML prototype.
 ```
 
@@ -97,7 +97,7 @@ Use it to resolve ambiguous terms, business rules, actors, permissions, happy pa
 
 ### [`candango-design`](./skills/candango/candango-design/SKILL.md)
 
-Runs when the feature has an interface: web screen, app, dashboard, admin panel, onboarding, checkout, settings, form, table, flow, or visual change. It produces or reviews design artifacts before the plan and spec are finalized.
+Runs when the feature has an interface: web screen, app, dashboard, admin panel, onboarding, checkout, settings, form, table, flow, or visual change. It locates the design system, coordinates UI work, and makes sure design artifacts are available before the plan and spec are finalized.
 
 The recommended path is a local HTML prototype first, then porting into the real codebase. Generated artifacts become references for the plan, spec, issues, and visual UAT.
 
