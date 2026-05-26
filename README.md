@@ -133,7 +133,7 @@ Tests should go through public interfaces, survive refactors, and verify real be
 
 ### [`candango-executor`](./skills/candango/candango-executor/SKILL.md)
 
-Orchestrates autonomous execution. The main agent picks unblocked issues, updates the dashboard, starts an executor with `candango-tdd`, starts an independent validator, decides whether to return to fixes, UAT, or done, and runs final validation.
+Orchestrates autonomous execution. The main agent picks unblocked issues, updates the dashboard, starts an executor with `candango-tdd`, starts an independent validator, decides whether to return to fixes, UAT, or done, rechecks backlog whenever an issue transitions to `done`, starts newly unblocked issues, and runs final validation.
 
 The executor may edit code. The validator does not edit; it receives the diff, spec, issue, and UAT, but not the executor conversation. This forces external validation instead of self-approval.
 
