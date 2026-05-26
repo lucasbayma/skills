@@ -1,20 +1,20 @@
 ---
 name: candango-wrap-up
-description: Candango Wrap-Up. Wraps completed feature work into a clean pull request with candango-caveman summary, UAT status, validation evidence, and temporary dashboard cleanup. Use when the user asks to wrap up, finalize, prepare PR, create PR, ship feature work, or clean temporary feature dashboard files. Part of Candango Skills by lucasbayma.
+description: Candango Wrap-Up. Wraps completed feature work into a clean pull request with caveman summary, UAT status, validation evidence, and temporary dashboard cleanup. Use when the user asks to wrap up, finalize, prepare PR, create PR, ship feature work, or clean temporary feature dashboard files.
 ---
 
 # Candango Wrap-Up
 
 Finalize feature work and create a PR.
 
-All user-facing communication and PR text must use `$candango-caveman`.
+All user-facing communication and PR text must use `$caveman`.
 
 ## Inputs
 
 Read:
 
 - `docs/features/<feature-slug>/plan.md`
-- `technical-spec.md`, `issues.md`, `uat.md`
+- `issues.md`, `uat.md`
 - dashboard state when present
 - current git branch, diff, commits, and remote
 - validation commands from repo docs or CI config
@@ -32,7 +32,7 @@ Remove generated dashboard runtime files that should not ship:
 - `docs/features/<feature-slug>/state.json.lock`
 - hidden temp files matching dashboard atomic-write leftovers
 
-Do not remove plan/spec/issues/UAT/design artifacts unless user asks.
+Do not remove plan/issues/UAT/design artifacts unless user asks.
 
 ### 2. Verify
 

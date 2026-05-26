@@ -1,0 +1,17 @@
+{
+  "name": "candango-skills",
+  "skills": [
+    "./skills/candango/candango-setup",
+    "./skills/candango/candango-caveman",
+    "./skills/candango/candango-discover",
+    "./skills/candango/candango-design",
+    "./skills/candango/candango-tdd",
+    "./skills/candango/candango-plan",
+    "./skills/candango/candango-spec",
+    "./skills/candango/candango-issues",
+    "./skills/candango/candango-uat",
+    "./skills/candango/candango-executor",
+    "./skills/candango/candango-uat-runner",
+    "./skills/candango/candango-wrap-up"
+  ]
+}

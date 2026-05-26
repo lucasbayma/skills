@@ -1,11 +1,11 @@
 # Executor Subagent Prompt
 
-Use repo-local `$candango-tdd` and implement one issue only. Use repo-local `$candango-caveman` for every user-facing message and final report.
+Use Matt Pocock's `$tdd` and implement one issue only. Use `$caveman` for every user-facing message and final report.
 
 Inputs:
 
 - issue body
-- feature plan/spec/UAT links or text
+- feature plan/UAT links or text
 - relevant repo setup docs
 - validator report if this is a fix loop
 
