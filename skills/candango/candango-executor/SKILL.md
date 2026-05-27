@@ -16,6 +16,7 @@ Main agent orchestrates. Executor subagent edits. Validator subagent reviews onl
 - If validator reports required fixes, main agent sends report back to executor.
 - Main agent polls/health-checks active subagents every 1 minute when tool support allows.
 - Main agent updates dashboard after every status change and major event.
+- After any issue transitions to `done`, regardless of its previous status, main agent rechecks every backlog issue and starts any issue that is now unblocked.
 - Every user-facing message, dashboard entry, and written report uses `$caveman` style: terse, high-signal, no fluff.
 - If issue/plan/UAT conflict or terms are ambiguous, pause execution and use `$candango-discover`.
 
@@ -67,7 +68,17 @@ See `references/dashboard-state.md`.
 
 ## Execution Loop
 
-For each unblocked issue:
+Run continuously while selected issues remain in `backlog`, `in-progress`, or `validation`.
+
+At startup, and after any issue transitions to `done`, rescan all backlog issues:
+
+- Re-evaluate dependencies against current issue statuses.
+- Treat an issue as startable when it is approved, AFK/executable, in `backlog`, and all `blocked_by` issues are complete enough for its dependency rule.
+- Start every newly startable issue allowed by current subagent capacity.
+- Do not wait for the originally selected unblocked set to drain before discovering newly unblocked backlog work.
+- Do not start newly unblocked issues on intermediate transitions such as `validation`, `uat`, or blocked states; only `done` releases new starts after the initial scan.
+
+For each startable issue:
 
 1. Move issue to `in-progress`.
 2. Start executor subagent with prompt from `references/executor-prompt.md`.
@@ -76,7 +87,8 @@ For each unblocked issue:
 5. Start validator subagent with prompt from `references/validator-prompt.md`.
 6. If validator passes, move issue to `uat` when UAT/manual acceptance remains, else `done`.
 7. If validator requires fixes, move issue to `in-progress` and send validator report to executor.
-8. Repeat until pass or blocked.
+8. If the issue transitions to `done`, immediately rescan all backlog issues and start any newly unblocked issue.
+9. Repeat until pass or blocked.
 
 If UAT is manual, hand off to `$candango-uat-runner` before `done`.
 
