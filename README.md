@@ -189,6 +189,12 @@ Finalizes the feature. It removes temporary dashboard files, verifies tests and 
 
 The PR should make clear what changed, why it changed, which UATs passed or remain pending, which commands validated the work, and whether temporary files were cleaned up.
 
+### [`fix-pr-checks`](./skills/utils/fix-pr-checks/SKILL.md)
+
+Monitors GitHub PR checks every 60 seconds, diagnoses failing checks, applies focused fixes, and reports each poll in Caveman-style tables.
+
+Use it when a PR needs active check polling, failure repair, and compact status reporting until checks pass or a blocker appears.
+
 ## References and Credits
 
 Candango combines original flow with skills and patterns used as a base:

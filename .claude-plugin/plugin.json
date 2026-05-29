@@ -12,6 +12,7 @@
     "./skills/candango/candango-uat",
     "./skills/candango/candango-executor",
     "./skills/candango/candango-uat-runner",
-    "./skills/candango/candango-wrap-up"
+    "./skills/candango/candango-wrap-up",
+    "./skills/utils/fix-pr-checks"
   ]
 }
