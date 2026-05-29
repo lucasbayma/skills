@@ -51,6 +51,7 @@ Select the recommended set:
 - `candango-uat`
 - `candango-executor`
 - `candango-uat-runner`
+- `check-pr-comments`
 - `candango-wrap-up`
 
 Run setup once in each target repo:
@@ -182,6 +183,12 @@ The executor may edit code. The validator does not edit; it receives the diff, i
 Runs manual or semi-automated UAT after implementation. It guides one scenario at a time, runs automated checks when possible, gives clear manual steps to the user, and records passed, failed, or blocked status.
 
 When a UAT fails, it captures repro steps, expected behavior, actual behavior, evidence, and related context, then sends that package to `candango-executor` to restart the fix loop with TDD and validation.
+
+### [`check-pr-comments`](./skills/utils/check-pr-comments/SKILL.md)
+
+Triages pull request feedback from a single polling window. It gathers PR comments, review summaries, inline comments, and review threads; groups related feedback; and presents each actionable item with two or three fix or reply options.
+
+It waits for user direction before editing code, posting replies, resolving threads, or changing PR state.
 
 ### [`candango-wrap-up`](./skills/candango/candango-wrap-up/SKILL.md)
 
