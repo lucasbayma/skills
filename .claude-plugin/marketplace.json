@@ -1,0 +1,40 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "lucasbayma-skills",
+  "owner": {
+    "name": "Lucas Bayma"
+  },
+  "metadata": {
+    "description": "Candango feature delivery skills and utility skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "candango-skills",
+      "description": "Candango feature delivery skills from setup through UAT, execution, and PR wrap-up",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/candango/candango-setup",
+        "./skills/candango/candango-discover",
+        "./skills/candango/candango-design",
+        "./skills/candango/candango-plan",
+        "./skills/candango/candango-issues",
+        "./skills/candango/candango-uat",
+        "./skills/candango/candango-executor",
+        "./skills/candango/candango-uat-runner",
+        "./skills/candango/candango-wrap-up"
+      ]
+    },
+    {
+      "name": "utils",
+      "description": "Utility skills for repository and pull request workflows",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/utils/check-pr-comments",
+        "./skills/utils/fix-pr-checks"
+      ]
+    }
+  ]
+}

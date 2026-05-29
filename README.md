@@ -33,7 +33,7 @@ Candango uses them directly:
 | `candango-issues` | `to-issues` |
 | `candango-executor` | `tdd` |
 
-### Install Candango
+### Install Skills
 
 Install with `skills.sh`:
 
@@ -41,7 +41,7 @@ Install with `skills.sh`:
 npx skills@latest add lucasbayma/skills
 ```
 
-Select the recommended set:
+Select the recommended Candango set from `candango-skills`:
 
 - `candango-setup`
 - `candango-discover`
@@ -51,8 +51,12 @@ Select the recommended set:
 - `candango-uat`
 - `candango-executor`
 - `candango-uat-runner`
-- `check-pr-comments`
 - `candango-wrap-up`
+
+Select utility skills from `utils`:
+
+- `check-pr-comments`
+- `fix-pr-checks`
 
 Run setup once in each target repo:
 
