@@ -32,7 +32,8 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/utils/check-pr-comments"
+        "./skills/utils/check-pr-comments",
+        "./skills/utils/fix-pr-checks"
       ]
     }
   ]

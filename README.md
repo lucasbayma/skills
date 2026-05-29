@@ -56,6 +56,7 @@ Select the recommended Candango set from `candango-skills`:
 Select utility skills from `utils`:
 
 - `check-pr-comments`
+- `fix-pr-checks`
 
 Run setup once in each target repo:
 
@@ -198,6 +199,12 @@ It waits for user direction before editing code, posting replies, resolving thre
 Finalizes the feature. It removes temporary dashboard files, verifies tests and final validation, checks UAT status, classifies the PR as feat, bugfix, or chore, prepares the commit, and creates the PR.
 
 The PR should make clear what changed, why it changed, which UATs passed or remain pending, which commands validated the work, and whether temporary files were cleaned up.
+
+### [`fix-pr-checks`](./skills/utils/fix-pr-checks/SKILL.md)
+
+Monitors GitHub PR checks every 60 seconds, diagnoses failing checks, applies focused fixes, and reports each poll in Caveman-style tables.
+
+Use it when a PR needs active check polling, failure repair, and compact status reporting until checks pass or a blocker appears.
 
 ## References and Credits
 
